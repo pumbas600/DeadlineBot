@@ -22,7 +22,6 @@ public class Main
 
     private void initialise() {
         try {
-            System.out.println(credentials.getApiKey());
 
             Calendar calendar = new Calendar.Builder(GoogleNetHttpTransport.newTrustedTransport(), GsonFactory.getDefaultInstance(), null)
                 .setApplicationName("Deadline Bot")
