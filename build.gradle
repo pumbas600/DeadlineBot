@@ -8,7 +8,13 @@
 plugins {
     id 'java'
     id 'io.freefair.lombok' version '6.2.0'
+    id 'org.springframework.boot' version '2.6.4'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
+
+group = 'net.pumbas'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '16'
 
 repositories {
     mavenCentral()
@@ -18,4 +24,11 @@ repositories {
 dependencies {
     implementation 'com.google.api-client:google-api-client:1.33.2'
     implementation 'com.google.apis:google-api-services-calendar:v3-rev20220203-1.32.1'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
 }

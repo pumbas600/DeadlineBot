@@ -1,4 +1,4 @@
-package net.pumbas;
+package net.pumbas.deadlinebot;
 
 import com.google.api.client.util.Key;
 
