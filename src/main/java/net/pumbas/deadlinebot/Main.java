@@ -43,9 +43,10 @@ public class Main
             .setDataStoreFactory(new FileDataStoreFactory(new File(TOKENS_FILE_PATH)))
             .setAccessType("online")
             .build();
+
         LocalServerReceiver receiver = new LocalServerReceiver.Builder()
             .setHost("localhost")
-            .setPort(8080)
+            .setPort(8888)
             .setCallbackPath("/api/v1/authorize")
             .build();
 
