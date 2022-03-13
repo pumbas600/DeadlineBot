@@ -1,5 +1,6 @@
 package net.pumbas.deadlinebot;
 
+import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -44,6 +45,11 @@ public class Main
             .setAccessType("online")
             .build();
 
+        AuthorizationCodeRequestUrl authorizationUrl = flow.newAuthorizationUrl().setRedirectUri("http://localhost:8080/api/v1/authorize/token");
+        String url = authorizationUrl.build();
+        System.out.printf("Go to %s to authorize\n", url);
+
+        //TODO: Manually generate authorization string and exchange code
         LocalServerReceiver receiver = new LocalServerReceiver.Builder()
             .setHost("localhost")
             .setPort(8888)
@@ -55,31 +61,31 @@ public class Main
 
     public static void main(String[] args) throws GeneralSecurityException, IOException {
         SpringApplication.run(Main.class, args);
-        final NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-        Calendar calendar = new Calendar.Builder(httpTransport, GsonFactory.getDefaultInstance(), getCredentials(httpTransport))
-            .setApplicationName("Deadline Bot")
-            .build();
-
-        DateTime now = new DateTime(System.currentTimeMillis());
-
-        Events events = calendar.events().list("primary")
-            .setMaxResults(10)
-            .setTimeMin(now)
-            .setOrderBy("startTime")
-            .setSingleEvents(true)
-            .execute();
-
-        List<Event> items = events.getItems();
-        if (items.isEmpty())
-            System.out.println("No upcoming events found");
-        else {
-            System.out.printf("Found %d upcoming events:\n", items.size());
-            for (Event event : items) {
-                DateTime start = event.getStart().getDateTime();
-                if (start == null)
-                    start = event.getStart().getDate(); // This is an all day event
-                System.out.printf("%s (%s)\n", event.getSummary(), start);
-            }
-        }
+//        final NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+//        Calendar calendar = new Calendar.Builder(httpTransport, GsonFactory.getDefaultInstance(), getCredentials(httpTransport))
+//            .setApplicationName("Deadline Bot")
+//            .build();
+//
+//        DateTime now = new DateTime(System.currentTimeMillis());
+//
+//        Events events = calendar.events().list("primary")
+//            .setMaxResults(10)
+//            .setTimeMin(now)
+//            .setOrderBy("startTime")
+//            .setSingleEvents(true)
+//            .execute();
+//
+//        List<Event> items = events.getItems();
+//        if (items.isEmpty())
+//            System.out.println("No upcoming events found");
+//        else {
+//            System.out.printf("Found %d upcoming events:\n", items.size());
+//            for (Event event : items) {
+//                DateTime start = event.getStart().getDateTime();
+//                if (start == null)
+//                    start = event.getStart().getDate(); // This is an all day event
+//                System.out.printf("%s (%s)\n", event.getSummary(), start);
+//            }
+//        }
     }
 }
