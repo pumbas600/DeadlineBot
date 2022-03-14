@@ -1,7 +1,6 @@
 package net.pumbas.deadlinebot.canvascalendar;
 
 import net.pumbas.deadlinebot.App;
-import net.pumbas.deadlinebot.authorization.UnauthorizedException;
 import net.pumbas.deadlinebot.common.Message;
 
 import org.springframework.http.ResponseEntity;
@@ -29,7 +28,7 @@ public class CalendarRestController
             CalendarModel calendar = calendarService.attemptToIdentifyCanvasCalendar(discordId);
             return ResponseEntity.ok(calendar);
         }
-        catch (UnauthorizedException | IOException e) {
+        catch (IOException e) {
             return ResponseEntity.badRequest().body(new Message(e.getMessage()));
         }
     }

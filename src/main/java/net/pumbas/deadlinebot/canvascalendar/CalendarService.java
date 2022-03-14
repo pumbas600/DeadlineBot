@@ -10,7 +10,7 @@ import com.google.api.services.calendar.model.CalendarList;
 
 import net.pumbas.deadlinebot.App;
 import net.pumbas.deadlinebot.authorization.AuthorizationService;
-import net.pumbas.deadlinebot.authorization.UnauthorizedException;
+import net.pumbas.deadlinebot.authorization.UnauthorizedAccessException;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.stereotype.Service;
@@ -44,13 +44,13 @@ public class CalendarService
      *      The discord id of the user
      *
      * @return The first calendar with a summary ending in <code>Calendar (Canvas)</code> or null if there were none
-     * @throws UnauthorizedException
+     * @throws UnauthorizedAccessException
      *      If the user hasn't been authorized
      * @throws IOException
      *      If there was an error fetching the calendars
      */
     @Nullable
-    public CalendarModel attemptToIdentifyCanvasCalendar(String discordId) throws UnauthorizedException, IOException {
+    public CalendarModel attemptToIdentifyCanvasCalendar(String discordId) throws UnauthorizedAccessException, IOException {
         Calendar service = this.getCalendar(discordId);
         CalendarList calendarList = service.calendarList().list().execute();
         return calendarList.getItems()
@@ -61,11 +61,11 @@ public class CalendarService
             .orElse(null);
     }
 
-    private Calendar getCalendar(String discordId) throws UnauthorizedException {
+    private Calendar getCalendar(String discordId) throws UnauthorizedAccessException {
         Credential credential = authorizationService.getCredentials(discordId);
         // The user hasn't authorized Deadline Bot
         if (credential == null)
-            throw new UnauthorizedException("The user " + discordId + " is unauthorized!");
+            throw new UnauthorizedAccessException("The user " + discordId + " is unauthorized!");
 
         return new Calendar.Builder(this.httpTransport, this.jsonFactory, credential)
             .setApplicationName(App.NAME)
