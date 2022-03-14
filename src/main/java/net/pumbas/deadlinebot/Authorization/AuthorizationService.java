@@ -53,11 +53,11 @@ public class AuthorizationService
     }
 
 
-    public String getAuthorizationUrl(String userId) {
+    public String getAuthorizationUrl(String discordId) {
         if (authorizationUrl == null) {
             AuthorizationCodeRequestUrl authorizationRequestUrl = flow.newAuthorizationUrl()
                 .setRedirectUri(AUTHORIZE_REDIRECT_URL)
-                .setState(userId);
+                .setState(discordId);
             authorizationUrl = authorizationRequestUrl.build();
         }
         return authorizationUrl;

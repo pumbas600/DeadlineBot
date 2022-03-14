@@ -23,26 +23,21 @@ public class AuthorizationRestController
     }
 
     @GetMapping("/authorize")
-    public RedirectView authorize(@RequestParam("id") String userId) {
-        String authorizationUrl = this.authorizationService.getAuthorizationUrl(userId);
+    public RedirectView authorize(@RequestParam("id") String discordId) {
+        String authorizationUrl = this.authorizationService.getAuthorizationUrl(discordId);
         return new RedirectView(authorizationUrl);
     }
 
     @GetMapping("/authorize/token")
-    public RedirectView authorizeToken(@RequestParam(name = "state", defaultValue = "user") String userId,
+    public RedirectView authorizeToken(@RequestParam(name = "state") String discordId,
                                        @RequestParam(name = "code", required = false) String code,
                                        @RequestParam(name = "error", required = false) String error)
     {
-        if (code != null) {
-            this.authorizationService.storeCredentials(code, userId);
-            return new RedirectView("/api/v1/authorized");
+        if (code != null && discordId != null) {
+            this.authorizationService.storeCredentials(code, discordId);
+            return new RedirectView("/authorization/authorized?id=%s".formatted(discordId));
         }
         return new RedirectView("/api/v1/unauthorized");
-    }
-
-    @GetMapping("/authorized")
-    public String authorized() {
-        return "Thanks for authorizing :)";
     }
 
     @GetMapping("/unauthorized")
