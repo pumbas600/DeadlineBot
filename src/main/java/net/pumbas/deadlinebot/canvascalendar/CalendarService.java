@@ -21,14 +21,14 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-public class CanvasCalendarService
+public class CalendarService
 {
     private final Map<String, CanvasCalendar> userCalendars = new ConcurrentHashMap<>();
     private final NetHttpTransport httpTransport;
     private final JsonFactory jsonFactory;
     private final AuthorizationService authorizationService;
 
-    public CanvasCalendarService(AuthorizationService authorizationService) throws GeneralSecurityException, IOException {
+    public CalendarService(AuthorizationService authorizationService) throws GeneralSecurityException, IOException {
         this.httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         this.jsonFactory = GsonFactory.getDefaultInstance();
 
@@ -50,7 +50,7 @@ public class CanvasCalendarService
      *      If there was an error fetching the calendars
      */
     @Nullable
-    private CanvasCalendar attemptToIdentifyCanvasCalendar(String discordId) throws UnauthorizedException, IOException {
+    public CanvasCalendar attemptToIdentifyCanvasCalendar(String discordId) throws UnauthorizedException, IOException {
         Calendar service = this.getCalendar(discordId);
         CalendarList calendarList = service.calendarList().list().execute();
         return calendarList.getItems()

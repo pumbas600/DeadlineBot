@@ -12,6 +12,8 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.calendar.CalendarScopes;
 
+import net.pumbas.deadlinebot.App;
+
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +30,7 @@ import java.util.List;
 @Service
 public class AuthorizationService
 {
-    public static final String AUTHORIZE_REDIRECT_URL = "http://localhost:8080/api/v1/authorize/token";
+    public static final String AUTHORIZE_REDIRECT_URL = "http://localhost:8080" + App.API_PREFIX + "/authorize/token";
 
     public static final String TOKENS_FILE_PATH = "tokens";
     public static final String CREDENTIALS_FILE_PATH = "credentials.json";

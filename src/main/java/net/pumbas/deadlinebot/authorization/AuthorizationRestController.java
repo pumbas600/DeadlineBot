@@ -1,5 +1,7 @@
 package net.pumbas.deadlinebot.authorization;
 
+import net.pumbas.deadlinebot.App;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping(App.API_PREFIX)
 public class AuthorizationRestController
 {
     private final AuthorizationService authorizationService;
