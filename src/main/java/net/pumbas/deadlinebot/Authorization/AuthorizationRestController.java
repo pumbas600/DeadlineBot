@@ -1,4 +1,4 @@
-package net.pumbas.deadlinebot;
+package net.pumbas.deadlinebot.Authorization;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,11 +9,11 @@ import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @RequestMapping("/api/v1")
-public class AuthorizationController
+public class AuthorizationRestController
 {
     private final AuthorizationService authorizationService;
 
-    public AuthorizationController(AuthorizationService authorizationService) {
+    public AuthorizationRestController(AuthorizationService authorizationService) {
         this.authorizationService = authorizationService;
     }
 
@@ -37,8 +37,7 @@ public class AuthorizationController
             this.authorizationService.storeCredentials(code, userId);
             return new RedirectView("/api/v1/authorized");
         }
-        else
-            return new RedirectView("/api/v1/unauthorized");
+        return new RedirectView("/api/v1/unauthorized");
     }
 
     @GetMapping("/authorized")

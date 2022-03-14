@@ -1,4 +1,4 @@
-package net.pumbas.deadlinebot;
+package net.pumbas.deadlinebot.Authorization;
 
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
@@ -79,7 +79,7 @@ public class AuthorizationService
         try {
             TokenResponse response = flow.newTokenRequest(code).setRedirectUri(AUTHORIZE_REDIRECT_URL).execute();
             flow.createAndStoreCredential(response, userId);
-            System.out.println("Created and stored credentials for " + userId);
+            System.out.println("Created and stored credentials for userId:" + userId);
         } catch (IOException e) {
             e.printStackTrace();
         }
