@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class CalendarService
 {
-    private final Map<String, CanvasCalendar> userCalendars = new ConcurrentHashMap<>();
+    private final Map<String, CalendarModel> userCalendars = new ConcurrentHashMap<>();
     private final NetHttpTransport httpTransport;
     private final JsonFactory jsonFactory;
     private final AuthorizationService authorizationService;
@@ -50,14 +50,14 @@ public class CalendarService
      *      If there was an error fetching the calendars
      */
     @Nullable
-    public CanvasCalendar attemptToIdentifyCanvasCalendar(String discordId) throws UnauthorizedException, IOException {
+    public CalendarModel attemptToIdentifyCanvasCalendar(String discordId) throws UnauthorizedException, IOException {
         Calendar service = this.getCalendar(discordId);
         CalendarList calendarList = service.calendarList().list().execute();
         return calendarList.getItems()
             .stream()
             .filter(calendar -> calendar.getSummary().trim().endsWith("Calendar (Canvas)"))
             .findFirst()
-            .map(calendar -> new CanvasCalendar(calendar.getId(), calendar.getSummary()))
+            .map(calendar -> new CalendarModel(calendar.getId(), calendar.getSummary()))
             .orElse(null);
     }
 

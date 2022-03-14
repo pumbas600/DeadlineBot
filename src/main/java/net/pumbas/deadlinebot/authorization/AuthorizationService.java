@@ -49,7 +49,7 @@ public class AuthorizationService
             this.flow = new GoogleAuthorizationCodeFlow.Builder(
                 GoogleNetHttpTransport.newTrustedTransport(), jsonFactory, clientSecrets, SCOPES)
                 .setDataStoreFactory(new FileDataStoreFactory(new File(TOKENS_FILE_PATH)))
-                .setAccessType("online")
+                .setAccessType("offline")
                 .build();
         };
     }
@@ -88,9 +88,9 @@ public class AuthorizationService
     }
 
     public static boolean isValid(@Nullable Credential credential) {
-        if (credential == null || credential.getRefreshToken() == null)
+        if (credential == null)
             return false;
-        if (credential.getExpiresInSeconds() == null || credential.getExpiresInSeconds() > 60)
+        if (credential.getRefreshToken() != null || credential.getExpiresInSeconds() == null || credential.getExpiresInSeconds() > 60)
             return true;
         try {
             // Try refresh the token

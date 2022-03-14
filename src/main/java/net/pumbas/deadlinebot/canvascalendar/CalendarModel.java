@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class CanvasCalendar
+public class CalendarModel
 {
     private String id;
     private String summary;
