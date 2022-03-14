@@ -37,11 +37,6 @@ public class AuthorizationRestController
             this.authorizationService.storeCredentials(code, discordId);
             return new RedirectView("/authorization/authorized?id=%s".formatted(discordId));
         }
-        return new RedirectView("/api/v1/unauthorized");
-    }
-
-    @GetMapping("/unauthorized")
-    public String unauthorized() {
-        return "You didn't authorize the bot to use your google calendar :(";
+        return new RedirectView("/authorization/unauthorized");
     }
 }

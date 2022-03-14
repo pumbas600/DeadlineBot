@@ -15,4 +15,9 @@ public class AuthorizationMvcController
         model.addAttribute("discordId", discordId);
         return "authorized";
     }
+
+    @GetMapping("/unauthorized")
+    public String unauthorized() {
+        return "unauthorized";
+    }
 }
