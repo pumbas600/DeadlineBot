@@ -1,4 +1,4 @@
-package net.pumbas.deadlinebot.Authorization;
+package net.pumbas.deadlinebot.authorization;
 
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
@@ -64,9 +64,9 @@ public class AuthorizationService
     }
 
     @Nullable
-    public Credential getCredentials(String userId) {
+    public Credential getCredentials(String discordId) {
         try {
-            Credential credential = flow.loadCredential(userId);
+            Credential credential = flow.loadCredential(discordId);
             if (isValid(credential))
                 return credential;
         } catch (IOException e) {
@@ -75,20 +75,26 @@ public class AuthorizationService
         return null;
     }
 
-    public void storeCredentials(String code, String userId) {
+    public void storeCredentials(String code, String discordId) {
         try {
             TokenResponse response = flow.newTokenRequest(code).setRedirectUri(AUTHORIZE_REDIRECT_URL).execute();
-            flow.createAndStoreCredential(response, userId);
-            System.out.println("Created and stored credentials for userId:" + userId);
+            flow.createAndStoreCredential(response, discordId);
+            System.out.println("Created and stored credentials for discordId:" + discordId);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static boolean isValid(Credential credential) {
-        return credential != null
-            && (credential.getRefreshToken() != null
-            || credential.getExpiresInSeconds() == null
-            || credential.getExpiresInSeconds() > 60);
+    public static boolean isValid(@Nullable Credential credential) {
+        if (credential == null || credential.getRefreshToken() == null)
+            return false;
+        if (credential.getExpiresInSeconds() == null || credential.getExpiresInSeconds() > 60)
+            return true;
+        try {
+            // Try refresh the token
+            return credential.refreshToken();
+        } catch (IOException ignored) {
+            return false;
+        }
     }
 }

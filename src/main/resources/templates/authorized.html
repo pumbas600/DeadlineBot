@@ -32,14 +32,18 @@
                 <br>
                 <div>
                     Your linked discord id is:
-                    <b th:text="${discordId}"></b>
+                    <b th:text="${discordId}"></b>.
                 </div>
             </div>
         </div>
         <h4>What's next?</h4>
-        <div class="my-1">
+        <div class="my-2">
             There's just two things left to do:
-            <li
+            <ol class="mt-2 mb-2">
+                <li>Check that Deadline Bot has identified the correct canvas calendar.</li>
+                <li>Confirm which classes you want to receive weekly deadlines for.</li>
+            </ol>
+            Both can be done in <em>settings</em>, then you're done :)
         </div>
         <a th:href="'/settings?id=' + ${discordId}">
             <div class="btn btn-outline-primary">Settings</div>

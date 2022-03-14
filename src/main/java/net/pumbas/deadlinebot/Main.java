@@ -31,6 +31,7 @@ import java.util.List;
 @SpringBootApplication
 public class Main
 {
+
     private static final String TOKENS_FILE_PATH = "tokens";
     private static final String CREDENTIALS_FILE_PATH = "credentials.json";
     private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR_READONLY);

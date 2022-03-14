@@ -1,4 +1,4 @@
-package net.pumbas.deadlinebot.Authorization;
+package net.pumbas.deadlinebot.authorization;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
