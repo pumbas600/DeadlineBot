@@ -37,7 +37,6 @@ public class AuthorizationService
     public static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR_READONLY);
 
     private AuthorizationCodeFlow flow;
-    private String authorizationUrl;
 
     @Bean
     public CommandLineRunner initialise() {
@@ -56,13 +55,10 @@ public class AuthorizationService
 
 
     public String getAuthorizationUrl(String discordId) {
-        if (authorizationUrl == null) {
-            AuthorizationCodeRequestUrl authorizationRequestUrl = flow.newAuthorizationUrl()
-                .setRedirectUri(AUTHORIZE_REDIRECT_URL)
-                .setState(discordId);
-            authorizationUrl = authorizationRequestUrl.build();
-        }
-        return authorizationUrl;
+        return flow.newAuthorizationUrl()
+            .setRedirectUri(AUTHORIZE_REDIRECT_URL)
+            .setState(discordId)
+            .build();
     }
 
     @Nullable
@@ -81,7 +77,7 @@ public class AuthorizationService
         try {
             TokenResponse response = flow.newTokenRequest(code).setRedirectUri(AUTHORIZE_REDIRECT_URL).execute();
             flow.createAndStoreCredential(response, discordId);
-            System.out.println("Created and stored credentials for discordId:" + discordId);
+            System.out.println("Created and stored credentials for discordId: " + discordId);
         } catch (IOException e) {
             e.printStackTrace();
         }

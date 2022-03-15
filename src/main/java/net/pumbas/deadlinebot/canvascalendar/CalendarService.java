@@ -5,8 +5,11 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.CalendarList;
+import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.Events;
 
 import net.pumbas.deadlinebot.App;
 import net.pumbas.deadlinebot.authorization.AuthorizationService;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +70,7 @@ public class CalendarService
      * @param discordId
      *      The discord id of the user
      *
-     * @return A list of all the calendars the specified user has
+     * @return An immutable list of all the calendars the specified user has
      * @throws UnauthorizedAccessException
      *      If the user hasn't authorized the bot to access their calendar
      */
@@ -84,6 +88,27 @@ public class CalendarService
         }
     }
 
+    public List<Event> getEventsBefore(String discordId, String calendarId, OffsetDateTime until)
+        throws UnauthorizedAccessException {
+        Calendar service = this.getCalendar(discordId);
+        DateTime now = new DateTime(System.currentTimeMillis());
+        DateTime end = offsetTimeToDateTime(until);
+
+        try {
+            Events events = service.events().list(calendarId)
+                .setMaxResults(100)
+                .setTimeMin(now)
+                .setTimeMax(end)
+                .setOrderBy("startTime")
+                .setSingleEvents(true)
+                .execute();
+            return events.getItems();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
     private Calendar getCalendar(String discordId) throws UnauthorizedAccessException {
         Credential credential = authorizationService.getCredentials(discordId);
         // The user hasn't authorized Deadline Bot
@@ -93,5 +118,9 @@ public class CalendarService
         return new Calendar.Builder(this.httpTransport, this.jsonFactory, credential)
             .setApplicationName(App.NAME)
             .build();
+    }
+
+    public static DateTime offsetTimeToDateTime(OffsetDateTime offsetDateTime) {
+        return new DateTime(offsetDateTime.toInstant().toEpochMilli());
     }
 }
