@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class CalendarModel
+public class CalendarData
 {
     private String id;
     private String summary;

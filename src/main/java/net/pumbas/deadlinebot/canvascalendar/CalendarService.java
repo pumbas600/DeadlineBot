@@ -17,13 +17,16 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class CalendarService
 {
-    private final Map<String, CalendarModel> userCalendars = new ConcurrentHashMap<>();
+    private final Map<String, CalendarData> userCalendars = new ConcurrentHashMap<>();
+
     private final NetHttpTransport httpTransport;
     private final JsonFactory jsonFactory;
     private final AuthorizationService authorizationService;
@@ -45,20 +48,40 @@ public class CalendarService
      *
      * @return The first calendar with a summary ending in <code>Calendar (Canvas)</code> or null if there were none
      * @throws UnauthorizedAccessException
-     *      If the user hasn't been authorized
-     * @throws IOException
-     *      If there was an error fetching the calendars
+     *      If the user hasn't authorized the bot to access their calendar
      */
     @Nullable
-    public CalendarModel attemptToIdentifyCanvasCalendar(String discordId) throws UnauthorizedAccessException, IOException {
-        Calendar service = this.getCalendar(discordId);
-        CalendarList calendarList = service.calendarList().list().execute();
-        return calendarList.getItems()
+    public CalendarData attemptToIdentifyCanvasCalendar(String discordId) throws UnauthorizedAccessException {
+        return this.listCalendars(discordId)
             .stream()
             .filter(calendar -> calendar.getSummary().trim().endsWith("Calendar (Canvas)"))
             .findFirst()
-            .map(calendar -> new CalendarModel(calendar.getId(), calendar.getSummary()))
             .orElse(null);
+    }
+
+    /**
+     * Retrieves a list of all the calendars that the specified user has. If they have no calendars, or there was an
+     * {@link IOException} while fetching them, an empty list is returned.
+     *
+     * @param discordId
+     *      The discord id of the user
+     *
+     * @return A list of all the calendars the specified user has
+     * @throws UnauthorizedAccessException
+     *      If the user hasn't authorized the bot to access their calendar
+     */
+    public List<CalendarData> listCalendars(String discordId) throws UnauthorizedAccessException {
+        try {
+            Calendar service = this.getCalendar(discordId);
+            CalendarList calendarList = service.calendarList().list().execute();
+            return calendarList.getItems()
+                .stream()
+                .map(calendar -> new CalendarData(calendar.getId(), calendar.getSummary()))
+                .toList();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
     }
 
     private Calendar getCalendar(String discordId) throws UnauthorizedAccessException {
