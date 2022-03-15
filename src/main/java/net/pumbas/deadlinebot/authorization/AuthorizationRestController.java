@@ -25,8 +25,8 @@ public class AuthorizationRestController
         return ResponseEntity.ok("You've successfully connected :)");
     }
 
-    @GetMapping("/authorize/{id}")
-    public RedirectView authorize(@PathVariable("id") String discordId) {
+    @GetMapping("/authorize")
+    public RedirectView authorize(@RequestParam("id") String discordId) {
         System.out.println("Authorizing: " + discordId);
         String authorizationUrl = this.authorizationService.getAuthorizationUrl(discordId);
         return new RedirectView(authorizationUrl);
