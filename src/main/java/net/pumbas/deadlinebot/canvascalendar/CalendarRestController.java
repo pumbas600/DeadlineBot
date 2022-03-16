@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(App.API_PREFIX)
@@ -39,9 +40,8 @@ public class CalendarRestController
         if (calendar == null)
             return ResponseEntity.badRequest().build();
 
-        for (String subject : blacklistedSubjects.split(",\s*")) {
-            calendar.addBlacklistedSubject(subject);
-        }
+        calendar.clearBlacklistedSubjects();
+        calendar.addBlackListedSubjects(Set.of(blacklistedSubjects.split(",")));
         OffsetDateTime end = OffsetDateTime.now().plusWeeks(1);
 
         List<TrackedEvent> events =  this.calendarService.listTrackedEventsBefore(discordId, calendar, end);
