@@ -88,6 +88,22 @@ public class CalendarService
         }
     }
 
+    /**
+     * Retrieves all the {@link Event events} in the specified calendar for the user between now and the end
+     * date. If there  are no events before the end date, or there was an {@link IOException} while fetching them,
+     * an empty list is returned instead.
+     *
+     * @param discordId
+     *      The discord id of the user
+     * @param calendarId
+     *      The id of the calendar to fetch the events from
+     * @param until
+     *      The date to fetch the events before
+     *
+     * @return An immutable list of the {@link Event events} between now and the specified end date
+     * @throws UnauthorizedAccessException
+     *      If the user hasn't authorized the bot to access their calendar
+     */
     public List<Event> getEventsBefore(String discordId, String calendarId, OffsetDateTime until)
         throws UnauthorizedAccessException {
         Calendar service = this.getCalendar(discordId);
