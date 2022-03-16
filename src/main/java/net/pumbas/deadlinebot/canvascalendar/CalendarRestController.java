@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -23,19 +24,27 @@ public class CalendarRestController
     }
 
     @GetMapping("/canvas_calendar")
-    public ResponseEntity<CalendarData> getCanvasCalendar(@RequestParam(name = "id") String discordId) {
+    public ResponseEntity<TrackedCalendar> getCanvasCalendar(@RequestParam(name = "id") String discordId) {
         System.out.println("Attempting to find canvas calendar!");
-        CalendarData calendar = this.calendarService.attemptToIdentifyCanvasCalendar(discordId);
+        TrackedCalendar calendar = this.calendarService.getCalendar(discordId);
         return ResponseEntity.ok(calendar);
     }
 
     @GetMapping("/upcoming/week")
-    public ResponseEntity<List<Event>> getUpcomingEventsNextWeek(@RequestParam(name = "id") String discordId) {
-        CalendarData calendar = this.calendarService.attemptToIdentifyCanvasCalendar(discordId);
+    public ResponseEntity<List<TrackedEvent>> getUpcomingEventsNextWeek(
+        @RequestParam(name = "id") String discordId,
+        @RequestParam(name = "blacklist", defaultValue = "") String blacklistedSubjects
+    ) {
+        TrackedCalendar calendar = this.calendarService.getCalendar(discordId);
         if (calendar == null)
             return ResponseEntity.badRequest().build();
-        List<Event> events =  this.calendarService
-            .getEventsBefore(discordId, calendar.getId(), OffsetDateTime.now().plusWeeks(1));
+
+        for (String subject : blacklistedSubjects.split(",\s*")) {
+            calendar.addBlacklistedSubject(subject);
+        }
+        OffsetDateTime end = OffsetDateTime.now().plusWeeks(1);
+
+        List<TrackedEvent> events =  this.calendarService.listTrackedEventsBefore(discordId, calendar, end);
         return ResponseEntity.ok(events);
     }
 }

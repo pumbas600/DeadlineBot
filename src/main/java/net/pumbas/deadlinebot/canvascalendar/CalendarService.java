@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class CalendarService
 {
-    private final Map<String, CalendarData> userCalendars = new ConcurrentHashMap<>();
+    private final Map<String, TrackedCalendar> userCalendars = new ConcurrentHashMap<>();
 
     private final NetHttpTransport httpTransport;
     private final JsonFactory jsonFactory;
@@ -40,6 +40,28 @@ public class CalendarService
         this.jsonFactory = GsonFactory.getDefaultInstance();
 
         this.authorizationService = authorizationService;
+    }
+
+    public List<TrackedEvent> listTrackedEventsBefore(
+        String discordId,
+        TrackedCalendar trackedCalendar,
+        OffsetDateTime end
+    ) throws UnauthorizedAccessException {
+        return this.listEventsBefore(discordId, trackedCalendar.getId(), end)
+            .stream()
+            .filter(event -> !trackedCalendar.isBlacklisted(event.getSummary()))
+            .map(TrackedEvent::from)
+            .toList();
+    }
+
+    @Nullable
+    public TrackedCalendar getCalendar(String discordId) throws UnauthorizedAccessException {
+        if (!this.userCalendars.containsKey(discordId)) {
+            CalendarData calendar = this.attemptToIdentifyCanvasCalendar(discordId);
+            if (calendar != null)
+                this.userCalendars.put(discordId, new TrackedCalendar(calendar));
+        }
+        return this.userCalendars.get(discordId);
     }
 
     /**
@@ -76,7 +98,7 @@ public class CalendarService
      */
     public List<CalendarData> listCalendars(String discordId) throws UnauthorizedAccessException {
         try {
-            Calendar service = this.getCalendar(discordId);
+            Calendar service = this.getService(discordId);
             CalendarList calendarList = service.calendarList().list().execute();
             return calendarList.getItems()
                 .stream()
@@ -104,9 +126,9 @@ public class CalendarService
      * @throws UnauthorizedAccessException
      *      If the user hasn't authorized the bot to access their calendar
      */
-    public List<Event> getEventsBefore(String discordId, String calendarId, OffsetDateTime until)
+    public List<Event> listEventsBefore(String discordId, String calendarId, OffsetDateTime until)
         throws UnauthorizedAccessException {
-        Calendar service = this.getCalendar(discordId);
+        Calendar service = this.getService(discordId);
         DateTime now = new DateTime(System.currentTimeMillis());
         DateTime end = offsetTimeToDateTime(until);
 
@@ -125,7 +147,7 @@ public class CalendarService
         }
     }
 
-    private Calendar getCalendar(String discordId) throws UnauthorizedAccessException {
+    private Calendar getService(String discordId) throws UnauthorizedAccessException {
         Credential credential = authorizationService.getCredentials(discordId);
         // The user hasn't authorized Deadline Bot
         if (credential == null)
