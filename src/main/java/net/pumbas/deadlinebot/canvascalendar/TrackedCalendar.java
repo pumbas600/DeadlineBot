@@ -55,7 +55,7 @@ public class TrackedCalendar
     public void addBlacklistedSubject(String subject) {
         Matcher matcher = SUBJECT_PATTERN.matcher(subject.trim());
         if (matcher.matches()) {
-            String blacklistedSubject = "%s %s".formatted(matcher.group(1), matcher.group(2)).toLowerCase();
+            String blacklistedSubject = "%s %s".formatted(matcher.group(1), matcher.group(2)).toUpperCase();
             this.blacklistedSubjects.add(blacklistedSubject);
         }
     }
