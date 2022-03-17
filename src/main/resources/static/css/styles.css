@@ -6,9 +6,11 @@
 }
 
 .progress-connection {
-    width: 15%;
+    width: 20%;
     height: 6px;
     border-radius: 3px;
+    position: relative;
+    bottom: 5px;
 }
 
 .progress-step {
@@ -22,13 +24,18 @@
 }
 
 .progress-step-complete {
-    color: white;
+    background-color: #d1e7dd;
+    border: 1px solid #badbcc;
+}
+
+.bg-light-green {
+    background-color: #d1e7dd;
 }
 
 .progress-step-incomplete {
     color: #6c757d;
     background-color: transparent;
-    border: 2px solid #6c757d;
+    border: 1px solid #6c757d;
 }
 
 .progress-title {

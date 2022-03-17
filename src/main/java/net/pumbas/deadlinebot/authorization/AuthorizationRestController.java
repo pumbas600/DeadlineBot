@@ -32,8 +32,8 @@ public class AuthorizationRestController
         return ResponseEntity.ok("You've successfully connected :)");
     }
 
-    @GetMapping("/authorize")
-    public RedirectView authorize(@RequestParam("id") String discordId) {
+    @GetMapping("/authorize/google")
+    public RedirectView authorizeGoogle(@RequestParam("id") String discordId) {
         System.out.println("Authorizing: " + discordId);
         String authorizationUrl = this.authorizationService.getAuthorizationUrl(discordId);
         return new RedirectView(authorizationUrl);
@@ -58,11 +58,11 @@ public class AuthorizationRestController
         }
 
         // Fetch discord id
-
+        String discordId = "260930648330469387";
 
         this.authorizationService.updateAuthorizationState(session.getId(), AuthorizationState.AUTHORIZED_DISCORD);
 
-        return new RedirectView();
+        return new RedirectView("/authorization/authorize?id=" + discordId);
     }
 
     @GetMapping("/authorize/token")

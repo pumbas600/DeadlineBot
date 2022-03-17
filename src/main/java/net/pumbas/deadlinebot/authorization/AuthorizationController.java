@@ -1,5 +1,7 @@
 package net.pumbas.deadlinebot.authorization;
 
+import net.pumbas.deadlinebot.App;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +27,9 @@ public class AuthorizationController
         Model model
     ) {
         AuthorizationState authorizationState = this.authorizationService.getAuthorizationState(session.getId());
-        model.addAttribute("authorizationState", authorizationState);
+        model.addAttribute("authorizationState", authorizationState.name());
+        model.addAttribute("authorizeDiscordUrl", App.API_PREFIX + "/authorize/discord");
+        model.addAttribute("authorizeGoogleUrl", App.API_PREFIX + "/authorize/google");
 
         return "authorize";
     }
