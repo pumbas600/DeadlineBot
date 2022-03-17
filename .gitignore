@@ -27,7 +27,8 @@ hs_err_pid*
 .idea
 
 credentials.json
-tokens
+discord_credentials.json
+tokens/
 
 # Ignore Gradle build output directory
 build

@@ -24,6 +24,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
@@ -62,31 +64,5 @@ public class Main
 
     public static void main(String[] args) throws GeneralSecurityException, IOException {
         SpringApplication.run(Main.class, args);
-//        final NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-//        Calendar calendar = new Calendar.Builder(httpTransport, GsonFactory.getDefaultInstance(), getCredentials(httpTransport))
-//            .setApplicationName("Deadline Bot")
-//            .build();
-//
-//        DateTime now = new DateTime(System.currentTimeMillis());
-//
-//        Events events = calendar.events().list("primary")
-//            .setMaxResults(10)
-//            .setTimeMin(now)
-//            .setOrderBy("startTime")
-//            .setSingleEvents(true)
-//            .execute();
-//
-//        List<Event> items = events.getItems();
-//        if (items.isEmpty())
-//            System.out.println("No upcoming events found");
-//        else {
-//            System.out.printf("Found %d upcoming events:\n", items.size());
-//            for (Event event : items) {
-//                DateTime start = event.getStart().getDateTime();
-//                if (start == null)
-//                    start = event.getStart().getDate(); // This is an all day event
-//                System.out.printf("%s (%s)\n", event.getSummary(), start);
-//            }
-//        }
     }
 }

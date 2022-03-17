@@ -1,7 +1,5 @@
 package net.pumbas.deadlinebot.canvascalendar;
 
-import com.google.api.services.calendar.model.Event;
-
 import net.pumbas.deadlinebot.App;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,9 +8,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.OffsetDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+
+import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping(App.API_PREFIX)
@@ -25,8 +24,12 @@ public class CalendarRestController
     }
 
     @GetMapping("/canvas_calendar")
-    public ResponseEntity<TrackedCalendar> getCanvasCalendar(@RequestParam(name = "id") String discordId) {
-        System.out.println("Attempting to find canvas calendar!");
+    public ResponseEntity<TrackedCalendar> getCanvasCalendar(
+        @RequestParam(name = "id") String discordId,
+        HttpSession session
+    ) {
+
+        System.out.println("Session id: " + session.getId());
         TrackedCalendar calendar = this.calendarService.getCalendar(discordId);
         return ResponseEntity.ok(calendar);
     }
@@ -34,8 +37,10 @@ public class CalendarRestController
     @GetMapping("/upcoming/week")
     public ResponseEntity<List<TrackedEvent>> getUpcomingEventsNextWeek(
         @RequestParam(name = "id") String discordId,
-        @RequestParam(name = "blacklist", defaultValue = "") String blacklistedSubjects
+        @RequestParam(name = "blacklist", defaultValue = "") String blacklistedSubjects,
+        HttpSession session
     ) {
+        System.out.println("Session id: " + session.getId());
         TrackedCalendar calendar = this.calendarService.getCalendar(discordId);
         if (calendar == null)
             return ResponseEntity.badRequest().build();
