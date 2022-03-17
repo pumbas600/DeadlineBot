@@ -1,0 +1,40 @@
+.progress-group {
+    display: flex;
+    margin: 0 5px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.progress-connection {
+    width: 15%;
+    height: 6px;
+    border-radius: 3px;
+}
+
+.progress-step {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+}
+
+.progress-step-complete {
+    color: white;
+}
+
+.progress-step-incomplete {
+    color: #6c757d;
+    background-color: transparent;
+    border: 2px solid #6c757d;
+}
+
+.progress-title {
+    width: 0;
+    height: 0;
+    left: -80px;
+    position: relative;
+    white-space: nowrap;
+}

@@ -24,7 +24,7 @@ public class DiscordAuthorizationService
     private DiscordCredentials discordCredentials;
 
     @Bean
-    public CommandLineRunner initialise() {
+    public CommandLineRunner initialiseDiscordService() {
         return (args) -> {
             JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
             InputStream discordCredentialJson = new ClassPathResource("discord_credentials.json").getInputStream();

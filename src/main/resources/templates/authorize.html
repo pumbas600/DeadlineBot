@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Deadline Bot: Authorize</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container-sm mt-5">
+        <div class="d-flex flex-row justify-content-center align-items-center">
+            <div th:switch="${authorizationState} == 'AUTHORIZED_DISCORD'" class="progress-group">
+                <div th:case="${true}" class="bg-success progress-step progress-step-complete">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-check2-circle flex-shrink-0" viewBox="0 0 16 16">
+                        <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/>
+                        <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+                    </svg>
+                </div>
+                <div th:case="*" class="progress-step progress-step-incomplete">
+                    <h4 class="mb-1">1</h4>
+                </div>
+                <h5 class="progress-title">Authorize Discord</h5>
+            </div>
+            <div th:class="'progress-connection' +  (${authorizationState} == 'AUTHORIZED_DISCORD' ? ' bg-success' : ' bg-secondary')">
+            </div>
+            <div th:switch="${authorizationState} == 'AUTHORIZED_GOOGLE'" class="progress-group">
+                <div th:case="${true}" class="bg-success progress-step progress-step-complete">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-check2-circle flex-shrink-0" viewBox="0 0 16 16">
+                        <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/>
+                        <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+                    </svg>
+                </div>
+                <div th:case="*" >
+                    <div class="progress-step progress-step-incomplete">
+                        <h4 class="mb-1">2</h4>
+                    </div>
+                </div>
+                <h5 class="progress-title">Authorize Google</h5>
+            </div>
+            <div th:class="'progress-connection' +  (${authorizationState} == 'AUTHORIZED_GOOGLE' ? ' bg-success' : ' bg-secondary')">
+            </div>
+            <div th:switch="${authorizationState} == 'AUTHORIZED'" class="progress-group">
+                <div th:case="${true}" class="bg-success progress-step progress-step-complete">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-check2-circle flex-shrink-0" viewBox="0 0 16 16">
+                        <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/>
+                        <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+                    </svg>
+                </div>
+                <div th:case="*" class="progress-step progress-step-incomplete">
+                    <h4 class="mb-1">3</h4>
+                </div>
+                <h5 class="progress-title">Confirm Settings</h5>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -56,10 +56,11 @@ public class AuthorizationRestController
             this.authorizationService.updateAuthorizationState(session.getId(), AuthorizationState.UNAUTHORIZED);
             return new RedirectView("/authorization/unauthorized?error=You were clickjacked!");
         }
-        this.authorizationService.updateAuthorizationState(session.getId(), AuthorizationState.AUTHORIZED_DISCORD);
 
         // Fetch discord id
 
+
+        this.authorizationService.updateAuthorizationState(session.getId(), AuthorizationState.AUTHORIZED_DISCORD);
 
         return new RedirectView();
     }

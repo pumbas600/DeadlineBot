@@ -44,7 +44,7 @@ public class AuthorizationService
     private AuthorizationCodeFlow googleFlow;
 
     @Bean
-    public CommandLineRunner initialise() {
+    public CommandLineRunner initialiseService() {
         return (args) -> {
             JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
             InputStream in = new ClassPathResource(CREDENTIALS_FILE_PATH).getInputStream();
