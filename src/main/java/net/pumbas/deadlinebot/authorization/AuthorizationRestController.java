@@ -1,10 +1,10 @@
 package net.pumbas.deadlinebot.authorization;
 
 import net.pumbas.deadlinebot.App;
+import net.pumbas.deadlinebot.authorization.discord.DiscordAuthorizationService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,9 +17,14 @@ import javax.servlet.http.HttpSession;
 public class AuthorizationRestController
 {
     private final AuthorizationService authorizationService;
+    private final DiscordAuthorizationService discordAuthorizationService;
 
-    public AuthorizationRestController(AuthorizationService authorizationService) {
+    public AuthorizationRestController(
+        AuthorizationService authorizationService,
+        DiscordAuthorizationService discordAuthorizationService
+    ) {
         this.authorizationService = authorizationService;
+        this.discordAuthorizationService = discordAuthorizationService;
     }
 
     @GetMapping("/authorize/test")
@@ -36,7 +41,7 @@ public class AuthorizationRestController
 
     @GetMapping("/authorize/discord")
     public RedirectView authorizeDiscord(HttpSession session) {
-        String authorizationUrl = this.authorizationService.getDiscordAuthorizationUrl(session);
+        String authorizationUrl = this.discordAuthorizationService.getAuthorizationUrl(session);
         return new RedirectView(authorizationUrl);
     }
 
@@ -48,9 +53,15 @@ public class AuthorizationRestController
     ) {
         if (!AuthorizationService.toBase64(session.getId()).equals(state)) {
             // Clickjacked
+            this.authorizationService.updateAuthorizationState(session.getId(), AuthorizationState.UNAUTHORIZED);
             return new RedirectView("/authorization/unauthorized?error=You were clickjacked!");
         }
-        return
+        this.authorizationService.updateAuthorizationState(session.getId(), AuthorizationState.AUTHORIZED_DISCORD);
+
+        // Fetch discord id
+
+
+        return new RedirectView();
     }
 
     @GetMapping("/authorize/token")

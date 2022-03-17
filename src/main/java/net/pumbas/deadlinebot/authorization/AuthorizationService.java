@@ -12,7 +12,6 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.calendar.CalendarScopes;
 
 import net.pumbas.deadlinebot.App;
-import net.pumbas.deadlinebot.authorization.discord.DiscordCredentials;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.boot.CommandLineRunner;
@@ -28,8 +27,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
-
-import javax.servlet.http.HttpSession;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class AuthorizationService
@@ -39,10 +38,9 @@ public class AuthorizationService
     public static final String TOKENS_FILE_PATH = "tokens";
     public static final String CREDENTIALS_FILE_PATH = "credentials.json";
     public static final List<String> CALENDAR_SCOPES = Collections.singletonList(CalendarScopes.CALENDAR_READONLY);
-    public static final List<String> DISCORD_SCOPES = List.of("identity");
 
-    private String baseDiscordAuthorizationUrl;
-    private DiscordCredentials discordCredentials;
+    private Map<String, AuthorizationState> sessionAuthorizationStates = new ConcurrentHashMap<>();
+
     private AuthorizationCodeFlow googleFlow;
 
     @Bean
@@ -52,13 +50,6 @@ public class AuthorizationService
             InputStream in = new ClassPathResource(CREDENTIALS_FILE_PATH).getInputStream();
             GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(jsonFactory, new InputStreamReader(in));
 
-            InputStream discordCredentialJson = new ClassPathResource("discord_credentials.json").getInputStream();
-            this.discordCredentials = jsonFactory.fromInputStream(discordCredentialJson, DiscordCredentials.class);
-
-            this.baseDiscordAuthorizationUrl = "https://discord.com/api/oauth2/authorize?client_id=" + this.discordCredentials.getClientId()  +
-                "redirect_uri=" + escapeUrlCharacters(AUTHORIZE_REDIRECT_URL) + "&response_type=token&scope=" +
-                String.join("%20", DISCORD_SCOPES);
-
             this.googleFlow = new GoogleAuthorizationCodeFlow.Builder(
                 GoogleNetHttpTransport.newTrustedTransport(), jsonFactory, clientSecrets, CALENDAR_SCOPES)
                 .setDataStoreFactory(new FileDataStoreFactory(new File(TOKENS_FILE_PATH)))
@@ -67,16 +58,22 @@ public class AuthorizationService
         };
     }
 
+    public void updateAuthorizationState(String sessionId, AuthorizationState newState) {
+        if (newState == AuthorizationState.UNAUTHORIZED)
+            this.sessionAuthorizationStates.remove(sessionId);
+        else
+            this.sessionAuthorizationStates.put(sessionId, newState);
+    }
+
+    public AuthorizationState getAuthorizationState(String sessionId) {
+        return this.sessionAuthorizationStates.getOrDefault(sessionId, AuthorizationState.UNAUTHORIZED);
+    }
 
     public String getAuthorizationUrl(String discordId) {
         return googleFlow.newAuthorizationUrl()
             .setRedirectUri(AUTHORIZE_REDIRECT_URL)
             .setState(discordId)
             .build();
-    }
-
-    public String getDiscordAuthorizationUrl(HttpSession session) {
-        return this.baseDiscordAuthorizationUrl + "&state=" + toBase64(session.getId());
     }
 
     @Nullable
@@ -116,11 +113,5 @@ public class AuthorizationService
 
     public static String toBase64(String str) {
         return Base64.getUrlEncoder().encodeToString(str.getBytes(StandardCharsets.UTF_8));
-    }
-
-    public static String escapeUrlCharacters(String redirectUrl) {
-        return redirectUrl.replaceAll("/", "%2F")
-            .replaceAll("\\\\", "%5C")
-            .replaceAll(":", "%3A");
     }
 }
