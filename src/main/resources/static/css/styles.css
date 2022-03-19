@@ -24,8 +24,8 @@
 }
 
 .progress-step-complete {
-    background-color: #d1e7dd;
-    border: 1px solid #badbcc;
+    background-color: #198754;
+    color: white;
 }
 
 .bg-light-green {
@@ -44,4 +44,29 @@
     left: -80px;
     position: relative;
     white-space: nowrap;
+}
+
+.progress-step-current::before {
+    content: "";
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    border-radius: 50%;
+    box-shadow: #198754 0px 0px 50px 10px;
+    animation: 3s linear 0s infinite normal none running size-animation;
+}
+
+.progress-step-current::after {
+    content: "";
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    border-radius: 50%;
+    box-shadow: #198754 0px 0px 50px 2px;
+}
+
+@keyframes size-animation {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
 }
