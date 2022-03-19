@@ -34,12 +34,6 @@ public class DiscordAuthorizationService
             this.baseAuthorizationUrl = "https://discord.com/api/oauth2/authorize?client_id=" + this.discordCredentials.getClientId()  +
                 "&redirect_uri=" + escapeUrlCharacters(REDIRECT_URL) +
                 "&response_type=code&scope=" + String.join("%20", DISCORD_SCOPES);
-
-            String com = "https://discord.com/api/oauth2/authorize?client_id=953822247456477254&redirect_uri=http%3A" +
-                "%2F%2Flocalhost%3A8080%2Fapi%2Fv1%2Fauthorize%2Fdiscord%2Fredirect&response_type=code&scope=identify";
-            System.out.println(com.equals(this.baseAuthorizationUrl));
-            System.out.println(baseAuthorizationUrl + "|");
-            System.out.println(com + "|");
         };
     }
 
