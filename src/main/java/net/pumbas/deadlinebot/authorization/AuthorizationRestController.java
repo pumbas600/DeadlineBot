@@ -2,6 +2,7 @@ package net.pumbas.deadlinebot.authorization;
 
 import net.pumbas.deadlinebot.App;
 import net.pumbas.deadlinebot.authorization.discord.DiscordAuthorizationService;
+import net.pumbas.deadlinebot.authorization.discord.UserData;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
+
+import java.util.concurrent.ExecutionException;
 
 import javax.servlet.http.HttpSession;
 
@@ -63,12 +66,19 @@ public class AuthorizationRestController
             return new RedirectView("/authorization/unauthorized?error=You were clickjacked!");
         }
 
-        // Fetch discord id
-        String discordId = "260930648330469387";
+        try {
+            UserData userData = this.discordAuthorizationService.exchangeCode(session.getId(), code).get();
+            if (!userData.isEmpty()) {
+                this.authorizationService.updateAuthorizationState(session.getId(), AuthorizationState.AUTHORIZED_DISCORD);
+                return new RedirectView("/authorization/authorize");
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        this.authorizationService.updateAuthorizationState(session.getId(), AuthorizationState.UNAUTHORIZED);
+        return new RedirectView("/authorization/unauthorized?error=Couldn't fetch user data");
 
-        this.authorizationService.updateAuthorizationState(session.getId(), AuthorizationState.AUTHORIZED_DISCORD);
 
-        return new RedirectView("/authorization/authorize?id=" + discordId);
     }
 
     @GetMapping("/authorize/token")

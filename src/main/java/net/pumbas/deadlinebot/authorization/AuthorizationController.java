@@ -1,6 +1,8 @@
 package net.pumbas.deadlinebot.authorization;
 
 import net.pumbas.deadlinebot.App;
+import net.pumbas.deadlinebot.authorization.discord.DiscordAuthorizationService;
+import net.pumbas.deadlinebot.authorization.discord.UserData;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,24 +17,30 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("authorization")
 public class AuthorizationController
 {
+    private final DiscordAuthorizationService discordAuthorizationService;
     private final AuthorizationService authorizationService;
 
-    public AuthorizationController(AuthorizationService authorizationService) {
+    public AuthorizationController(DiscordAuthorizationService discordAuthorizationService,
+                                   AuthorizationService authorizationService
+    ) {
+        this.discordAuthorizationService = discordAuthorizationService;
         this.authorizationService = authorizationService;
     }
 
     @GetMapping("/authorize")
     public String authorize(
-        @RequestParam(name = "id", required = false) String discordId,
         HttpSession session,
         Model model
     ) {
+        UserData userData = this.discordAuthorizationService.getUserData(session.getId());
+
         AuthorizationState authorizationState = this.authorizationService.getAuthorizationState(session.getId());
         model.addAttribute("authorizationState", authorizationState.ordinal());
         model.addAttribute("authorizeDiscordUrl", App.API_PREFIX + "/authorize/discord");
         model.addAttribute("authorizeResetUrl", App.API_PREFIX + "/authorize/reset");
-        model.addAttribute("authorizeGoogleUrl", App.API_PREFIX + "/authorize/google?id=" + discordId);
-        model.addAttribute("discordId", discordId);
+        model.addAttribute("authorizeGoogleUrl", App.API_PREFIX + "/authorize/google?id=" + userData.getId());
+        model.addAttribute("discordId", userData.getId());
+        model.addAttribute("discordTag", userData.getTag());
 
         return "authorize";
     }

@@ -86,9 +86,14 @@
                         </a>
                         <div class="mt-2">
                             Allow the Deadline bot to access your Google calendars.
+                            <br>
+                            Your linked discord is: <b th:text="${discordTag}"></b>.
+                            <br>
+                            <br>
+                            Not the right discord id? Click <a th:href="${authorizeResetUrl}">here</a> to reset.
                         </div>
                     </div>
-                    <div th:case="*">
+                    <div th:case="2">
                         <div class="alert alert-success d-flex flex-column" role="alert">
                             <div class="d-flex">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-check2-all flex-shrink-0 me-2 mt-1" viewBox="0 0 16 16">
@@ -113,18 +118,20 @@
                                 </div>
                             </div>
                         </div>
-                        <h4>What's next?</h4>
-                        <div class="my-2">
-                            There's just two things left to do:
-                            <ol class="mt-2 mb-2">
-                                <li>Check that Deadline Bot has identified the correct canvas calendar.</li>
-                                <li>Confirm which classes you want to receive weekly deadlines for.</li>
-                            </ol>
-                            Both can be done in <em>settings</em>, then you're done :)
+                        <div>
+                            <h4>What's next?</h4>
+                            <div class="my-2">
+                                There's just two things left to do:
+                                <ol class="mt-2 mb-2">
+                                    <li>Check that Deadline Bot has identified the correct canvas calendar.</li>
+                                    <li>Confirm which classes you want to receive weekly deadlines for.</li>
+                                </ol>
+                                Both can be done in <em>settings</em>, then you're done :)
+                            </div>
+                            <a th:href="'/settings?id=' + ${discordId}">
+                                <div class="btn btn-outline-primary">Settings</div>
+                            </a>
                         </div>
-                        <a th:href="'/settings?id=' + ${discordId}">
-                            <div class="btn btn-outline-primary">Settings</div>
-                        </a>
                     </div>
                 </div>
             </div>
