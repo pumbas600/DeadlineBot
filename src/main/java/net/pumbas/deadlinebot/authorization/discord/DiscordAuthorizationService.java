@@ -58,7 +58,7 @@ public class DiscordAuthorizationService
         };
     }
 
-    public CompletableFuture<UserData> exchangeCode(String sessionId, String code) {
+    public UserData exchangeCode(String sessionId, String code) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -67,7 +67,9 @@ public class DiscordAuthorizationService
         properties.add("client_secret", this.discordCredentials.getSecretId());
         properties.add("grant_type", "authorization_code");
         properties.add("code", code);
-        properties.add("redirect_uri", "http://localhost:8080/authorization/authorize");
+        properties.add("redirect_uri", "http://localhost:8080/api/v1/authorize/discord/redirect");
+
+        System.out.println(code);
 
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<DiscordAccessToken> response = restTemplate.postForEntity(
@@ -79,80 +81,32 @@ public class DiscordAuthorizationService
         if (accessToken != null) {
             System.out.println(accessToken.getAccessToken());
             System.out.println(accessToken.getTokenType());
+            return this.updateUserData(sessionId, accessToken);
         }
-
-//        HttpRequest request = HttpRequest.newBuilder()
-//            .uri(URI.create("https://discord.com/api/v8/oauth2/token"))
-//            .header("Content-Type", "application/x-www-form-urlencoded")
-//            .POST(BodyPublishers.ofString("""
-//                {
-//                    "client_id": "%s",
-//                    "client_secret": "%s",
-//                    "grant_type": "authorization_code",
-//                    "code": "%s",
-//                    "redirect_uri": "%s"
-//                }
-//                """.formatted(
-//                    this.discordCredentials.getClientId(),
-//                    this.discordCredentials.getSecretId(),
-//                    code,
-//                    "http://localhost:8080/authorization/authorize"
-//                )))
-//            .build();
-//        try {
-//            HttpResponse<String> response = this.httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-//            if (response.statusCode() != 200) {
-//                System.out.println(response.body());
-//            }
-//
-//            DiscordAccessToken accessToken = this.jsonFactory.fromString(response.body(), DiscordAccessToken.class);
-//
-//
-//
-//        } catch (IOException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-        return CompletableFuture.supplyAsync(() -> UserData.EMPTY);
-
-//        return this.httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-//            .thenApply((response) -> {
-//                try {
-//                    return this.jsonFactory.fromString(response.body(), DiscordAccessToken.class);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                return null;
-//            })
-//            .thenCompose((accessToken) -> {
-//                if (accessToken == null)
-//                    return CompletableFuture.supplyAsync(() -> UserData.EMPTY);
-//                return this.updateUserData(sessionId, accessToken);
-//            });
+        return UserData.EMPTY;
     }
 
     public UserData getUserData(String sessionId) {
         return this.userData.getOrDefault(sessionId, UserData.EMPTY);
     }
 
-    public CompletableFuture<UserData> updateUserData(String sessionId, DiscordAccessToken accessToken) {
+    public UserData updateUserData(String sessionId, DiscordAccessToken accessToken) {
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create("https://discord.com/api/users/@me"))
             .header("authorization", "%s %s".formatted(accessToken.getTokenType(), accessToken.getAccessToken()))
             .build();
 
-            return this.httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                .thenApply((response) -> {
-                    if (response.statusCode() == 200) { // Ok
-                        try {
-                            UserData userData = this.jsonFactory.fromString(response.body(), UserData.class);
-                            this.userData.put(sessionId, userData);
-                            return userData;
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    return UserData.EMPTY;
-                });
+            try {
+                HttpResponse<String> response = this.httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                if (response.statusCode() == 200) {
+                    UserData userData = this.jsonFactory.fromString(response.body(), UserData.class);
+                    this.userData.put(sessionId, userData);
+                    return userData;
+                }
+            } catch (InterruptedException | IOException e) {
+                e.printStackTrace();
+            }
+            return UserData.EMPTY;
     }
 
     public String getAuthorizationUrl(HttpSession session) {

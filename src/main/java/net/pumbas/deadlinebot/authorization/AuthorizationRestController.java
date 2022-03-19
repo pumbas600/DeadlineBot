@@ -66,19 +66,14 @@ public class AuthorizationRestController
             return new RedirectView("/authorization/unauthorized?error=You were clickjacked!");
         }
 
-        try {
-            UserData userData = this.discordAuthorizationService.exchangeCode(session.getId(), code).get();
-            if (!userData.isEmpty()) {
-                this.authorizationService.updateAuthorizationState(session.getId(), AuthorizationState.AUTHORIZED_DISCORD);
-                return new RedirectView("/authorization/authorize");
-            }
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+
+        UserData userData = this.discordAuthorizationService.exchangeCode(session.getId(), code);
+        if (!userData.isEmpty()) {
+            this.authorizationService.updateAuthorizationState(session.getId(), AuthorizationState.AUTHORIZED_DISCORD);
+            return new RedirectView("/authorization/authorize");
         }
         this.authorizationService.updateAuthorizationState(session.getId(), AuthorizationState.UNAUTHORIZED);
         return new RedirectView("/authorization/unauthorized?error=Couldn't fetch user data");
-
-
     }
 
     @GetMapping("/authorize/token")

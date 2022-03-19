@@ -76,8 +76,8 @@
     padding: 0.5rem;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 992px) {
     .responsive-container {
-        width: 60%;
+        width: 850px;
     }
 }
