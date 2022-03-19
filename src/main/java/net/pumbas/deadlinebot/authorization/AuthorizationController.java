@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpSession;
 
@@ -29,7 +30,9 @@ public class AuthorizationController
         AuthorizationState authorizationState = this.authorizationService.getAuthorizationState(session.getId());
         model.addAttribute("authorizationState", authorizationState.name());
         model.addAttribute("authorizeDiscordUrl", App.API_PREFIX + "/authorize/discord");
-        model.addAttribute("authorizeGoogleUrl", App.API_PREFIX + "/authorize/google");
+        model.addAttribute("authorizeResetUrl", App.API_PREFIX + "/authorize/reset");
+        model.addAttribute("authorizeGoogleUrl", App.API_PREFIX + "/authorize/google?id=" + discordId);
+        model.addAttribute("discordId", discordId);
 
         return "authorize";
     }

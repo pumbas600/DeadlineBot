@@ -32,6 +32,12 @@ public class AuthorizationRestController
         return ResponseEntity.ok("You've successfully connected :)");
     }
 
+    @GetMapping("/authorize/reset")
+    public RedirectView authorizeReset(HttpSession session) {
+        this.authorizationService.updateAuthorizationState(session.getId(), AuthorizationState.UNAUTHORIZED);
+        return new RedirectView("/authorization/authorize");
+    }
+
     @GetMapping("/authorize/google")
     public RedirectView authorizeGoogle(@RequestParam("id") String discordId) {
         System.out.println("Authorizing: " + discordId);
@@ -68,11 +74,12 @@ public class AuthorizationRestController
     @GetMapping("/authorize/token")
     public RedirectView authorizeToken(@RequestParam(name = "state") String discordId,
                                        @RequestParam(name = "code", required = false) String code,
-                                       @RequestParam(name = "error", required = false) String error)
-    {
+                                       HttpSession session
+    ) {
         if (code != null && discordId != null) {
             this.authorizationService.storeCredentials(code, discordId);
-            return new RedirectView("/authorization/authorized?id=%s".formatted(discordId));
+            this.authorizationService.updateAuthorizationState(session.getId(), AuthorizationState.AUTHORIZED_GOOGLE);
+            return new RedirectView("/authorization/authorize?id=%s".formatted(discordId));
         }
         return new RedirectView("/authorization/unauthorized");
     }

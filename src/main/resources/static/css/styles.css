@@ -6,21 +6,20 @@
 }
 
 .progress-connection {
-    width: 20%;
-    height: 6px;
+    flex: 15%;
+    height: 0.4rem;
     border-radius: 3px;
     position: relative;
-    bottom: 5px;
 }
 
 .progress-step {
-    width: 35px;
-    height: 35px;
+    width: 2.5em;
+    height: 2.5em;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 5px;
+    margin: 0.4rem;
 }
 
 .progress-step-complete {
@@ -39,34 +38,46 @@
 }
 
 .progress-title {
-    width: 0;
-    height: 0;
-    left: -80px;
-    position: relative;
-    white-space: nowrap;
+    width: min-content;
 }
 
 .progress-step-current::before {
     content: "";
-    width: 35px;
-    height: 35px;
+    width: 2.5em;
+    height: 2.5em;
     position: absolute;
     border-radius: 50%;
-    box-shadow: #198754 0px 0px 50px 10px;
-    animation: 3s linear 0s infinite normal none running size-animation;
+    box-shadow: #198754 0px 0px 10px 2px;
+    animation: 4s linear 0s infinite normal none running size-animation;
 }
 
 .progress-step-current::after {
     content: "";
-    width: 35px;
-    height: 35px;
+    width: 2.5em;
+    height: 2.5em;
     position: absolute;
     border-radius: 50%;
-    box-shadow: #198754 0px 0px 50px 2px;
+    box-shadow: #198754 0px 0px 7px 0px;
+}
+
+.progress-number {
+    position: relative;
+    top: 0.2rem;
 }
 
 @keyframes size-animation {
     0% { opacity: 0; }
     50% { opacity: 1; }
     100% { opacity: 0; }
+}
+
+.responsive-container {
+    width: 100%;
+    padding: 1rem;
+}
+
+@media (min-width: 768px) {
+    .responsive-container {
+        width: 60%;
+    }
 }
