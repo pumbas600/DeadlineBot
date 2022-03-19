@@ -10,7 +10,13 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +25,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -52,39 +59,75 @@ public class DiscordAuthorizationService
     }
 
     public CompletableFuture<UserData> exchangeCode(String sessionId, String code) {
-        HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("https://discord.com/api/v8/oauth2/token"))
-            .header("Content-Type", "application/x-www-form-urlencoded")
-            .POST(BodyPublishers.ofString("""
-                {
-                    "client_id"="%s",
-                    "client_secret"="%s",
-                    "grant_type"="authorization_code",
-                    "code"="%s",
-                    "redirect_uri"="%s"
-                }
-                """.formatted(
-                    this.discordCredentials.getClientId(),
-                    this.discordCredentials.getSecretId(),
-                    code,
-                    "http://localhost:8080/authorization/authorize"
-                )))
-            .build();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        return this.httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-            .thenApply((response) -> {
-                try {
-                    return this.jsonFactory.fromString(response.body(), DiscordAccessToken.class);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            })
-            .thenCompose((accessToken) -> {
-                if (accessToken == null)
-                    return CompletableFuture.supplyAsync(() -> UserData.EMPTY);
-                return this.updateUserData(sessionId, accessToken);
-            });
+        LinkedMultiValueMap<String, String> properties = new LinkedMultiValueMap<>();
+        properties.add("client_id", this.discordCredentials.getClientId());
+        properties.add("client_secret", this.discordCredentials.getSecretId());
+        properties.add("grant_type", "authorization_code");
+        properties.add("code", code);
+        properties.add("redirect_uri", "http://localhost:8080/authorization/authorize");
+
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<DiscordAccessToken> response = restTemplate.postForEntity(
+            "https://discord.com/api/v8/oauth2/token",
+            new HttpEntity<>(properties, headers),
+            DiscordAccessToken.class);
+
+        DiscordAccessToken accessToken = response.getBody();
+        if (accessToken != null) {
+            System.out.println(accessToken.getAccessToken());
+            System.out.println(accessToken.getTokenType());
+        }
+
+//        HttpRequest request = HttpRequest.newBuilder()
+//            .uri(URI.create("https://discord.com/api/v8/oauth2/token"))
+//            .header("Content-Type", "application/x-www-form-urlencoded")
+//            .POST(BodyPublishers.ofString("""
+//                {
+//                    "client_id": "%s",
+//                    "client_secret": "%s",
+//                    "grant_type": "authorization_code",
+//                    "code": "%s",
+//                    "redirect_uri": "%s"
+//                }
+//                """.formatted(
+//                    this.discordCredentials.getClientId(),
+//                    this.discordCredentials.getSecretId(),
+//                    code,
+//                    "http://localhost:8080/authorization/authorize"
+//                )))
+//            .build();
+//        try {
+//            HttpResponse<String> response = this.httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+//            if (response.statusCode() != 200) {
+//                System.out.println(response.body());
+//            }
+//
+//            DiscordAccessToken accessToken = this.jsonFactory.fromString(response.body(), DiscordAccessToken.class);
+//
+//
+//
+//        } catch (IOException | InterruptedException e) {
+//            e.printStackTrace();
+//        }
+        return CompletableFuture.supplyAsync(() -> UserData.EMPTY);
+
+//        return this.httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+//            .thenApply((response) -> {
+//                try {
+//                    return this.jsonFactory.fromString(response.body(), DiscordAccessToken.class);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                return null;
+//            })
+//            .thenCompose((accessToken) -> {
+//                if (accessToken == null)
+//                    return CompletableFuture.supplyAsync(() -> UserData.EMPTY);
+//                return this.updateUserData(sessionId, accessToken);
+//            });
     }
 
     public UserData getUserData(String sessionId) {
