@@ -15,63 +15,67 @@ public class TrackedCalendar
     private final static Pattern SUBJECT_PATTERN = Pattern.compile("([a-zA-Z]+) ?(\\w*[\\d]+\\w*)");
 
     @Getter
+    private final String ownerId;
+
+    @Getter
     private final String id;
 
     @Getter
     private final String summary;
 
-    private final Set<String> blacklistedSubjects;
+    private final Set<String> courses;
 
-    public TrackedCalendar(CalendarData calendarData) {
-        this(calendarData.getId(), calendarData.getSummary());
+    public TrackedCalendar(String ownerId, CalendarData calendarData) {
+        this(ownerId, calendarData.getId(), calendarData.getSummary());
     }
 
-    public TrackedCalendar(String id, String summary) {
+    public TrackedCalendar(String ownerId, String id, String summary) {
+        this.ownerId = ownerId;
         this.id = id;
         this.summary = summary;
-        this.blacklistedSubjects = new HashSet<>();
+        this.courses = new HashSet<>();
     }
 
-    public boolean isBlacklisted(String eventSummary) {
-        return blacklistedSubjects.stream()
+    public boolean isTracked(String eventSummary) {
+        return courses.stream()
             .anyMatch(subject -> eventSummary.endsWith(subject + "]"));
     }
 
     /**
-     * Adds and formats subjects to be blacklisted. For a subject to be blacklisted they have to be in the format:
+     * Adds and formats courses to be tracked. For a course to be tracked they have to be in the format:
      * 'SOFTENG281' or 'SOFTENG 281'. The text doesn't need to be capitalised, and it can have characters before and
-     * after the subject number, e.g: 'ACCTG 151G' or 'ACADINT A01'. Do note that in the second case, where there are
-     * characters before the subject number, for them to be properly detected there must be a space between 'ACADINT'
-     * and 'A01'. 'ACADINTA01' will be reformatted to 'ACADINTA 01', which will lead to the subject not being
-     * properly filtered. If a subject is not of a valid format, e.g: just the course number: '281', then it will be
+     * after the course number, e.g: 'ACCTG 151G' or 'ACADINT A01'. Do note that in the second case, where there are
+     * characters before the course number, for them to be properly detected there must be a space between 'ACADINT'
+     * and 'A01'. 'ACADINTA01' will be reformatted to 'ACADINTA 01', which will lead to the course not being
+     * properly filtered. If a course is not of a valid format, e.g: just the course number: '281', then it will be
      * ignored.
      *
-     * @param subject
-     *      The subject to blacklist
+     * @param course
+     *      The course to track
      */
-    public void addBlacklistedSubject(String subject) {
-        Matcher matcher = SUBJECT_PATTERN.matcher(subject.trim());
+    public void addCourse(String course) {
+        Matcher matcher = SUBJECT_PATTERN.matcher(course.trim());
         if (matcher.matches()) {
             String blacklistedSubject = "%s %s".formatted(matcher.group(1), matcher.group(2)).toUpperCase();
-            this.blacklistedSubjects.add(blacklistedSubject);
+            this.courses.add(blacklistedSubject);
         }
     }
 
-    public void addBlackListedSubjects(Set<String> subjects) {
+    public void addCourses(Set<String> subjects) {
         for (String subject : subjects) {
-            this.addBlacklistedSubject(subject);
+            this.addCourse(subject);
         }
     }
 
-    public void clearBlacklistedSubjects() {
-        this.blacklistedSubjects.clear();
+    public void clearCourses() {
+        this.courses.clear();
     }
 
     /**
-     * @return The blacklisted subjects in an unmodifiable set
-     * @see TrackedCalendar#addBlacklistedSubject(String)
+     * @return The tracked courses in an unmodifiable set
+     * @see TrackedCalendar#addCourse(String)
      */
-    public Set<String> getBlacklistedSubjects() {
-        return Collections.unmodifiableSet(blacklistedSubjects);
+    public Set<String> getCourses() {
+        return Collections.unmodifiableSet(courses);
     }
 }

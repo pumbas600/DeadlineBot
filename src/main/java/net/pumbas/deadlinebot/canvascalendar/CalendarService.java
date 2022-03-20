@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class CalendarService
 {
-    private final Map<String, TrackedCalendar> userCalendars = new ConcurrentHashMap<>();
+    private final Map<String, TrackedCalendar> trackedCalendars = new ConcurrentHashMap<>();
 
     private final NetHttpTransport httpTransport;
     private final JsonFactory jsonFactory;
@@ -49,19 +49,25 @@ public class CalendarService
     ) throws UnauthorizedAccessException {
         return this.listEventsBefore(discordId, trackedCalendar.getId(), end)
             .stream()
-            .filter(event -> !trackedCalendar.isBlacklisted(event.getSummary()))
+            .filter(event -> trackedCalendar.isTracked(event.getSummary()))
             .map(TrackedEvent::from)
             .toList();
     }
 
     @Nullable
-    public TrackedCalendar getCalendar(String discordId) throws UnauthorizedAccessException {
-        if (!this.userCalendars.containsKey(discordId)) {
-            CalendarData calendar = this.attemptToIdentifyCanvasCalendar(discordId);
-            if (calendar != null)
-                this.userCalendars.put(discordId, new TrackedCalendar(calendar));
-        }
-        return this.userCalendars.get(discordId);
+    public TrackedCalendar findById(String id) {
+        return this.trackedCalendars.get(id);
+    }
+
+    public List<TrackedCalendar> listTrackedCalendars(String discordId) {
+        return this.trackedCalendars.values()
+            .stream()
+            .filter(trackedCalendar -> trackedCalendar.getOwnerId().equals(discordId))
+            .toList();
+    }
+
+    public TrackedCalendar save(TrackedCalendar trackedCalendar) {
+        return this.trackedCalendars.put(trackedCalendar.getId(), trackedCalendar);
     }
 
     /**
@@ -78,7 +84,7 @@ public class CalendarService
      */
     @Nullable
     public CalendarData attemptToIdentifyCanvasCalendar(String discordId) throws UnauthorizedAccessException {
-        return this.listCalendars(discordId)
+        return this.listGoogleCalendars(discordId)
             .stream()
             .filter(calendar -> calendar.getSummary().trim().endsWith("Calendar (Canvas)"))
             .findFirst()
@@ -96,7 +102,7 @@ public class CalendarService
      * @throws UnauthorizedAccessException
      *      If the user hasn't authorized the bot to access their calendar
      */
-    public List<CalendarData> listCalendars(String discordId) throws UnauthorizedAccessException {
+    public List<CalendarData> listGoogleCalendars(String discordId) throws UnauthorizedAccessException {
         try {
             Calendar service = this.getService(discordId);
             CalendarList calendarList = service.calendarList().list().execute();
