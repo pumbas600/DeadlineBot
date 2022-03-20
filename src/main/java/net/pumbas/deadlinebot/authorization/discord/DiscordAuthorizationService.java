@@ -6,7 +6,6 @@ import com.google.api.client.json.gson.GsonFactory;
 import net.pumbas.deadlinebot.App;
 import net.pumbas.deadlinebot.authorization.AuthorizationService;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
@@ -23,12 +22,9 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
@@ -69,8 +65,6 @@ public class DiscordAuthorizationService
         properties.add("code", code);
         properties.add("redirect_uri", "http://localhost:8080/api/v1/authorize/discord/redirect");
 
-        System.out.println(code);
-
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<DiscordAccessToken> response = restTemplate.postForEntity(
             "https://discord.com/api/v8/oauth2/token",
@@ -79,8 +73,6 @@ public class DiscordAuthorizationService
 
         DiscordAccessToken accessToken = response.getBody();
         if (accessToken != null) {
-            System.out.println(accessToken.getAccessToken());
-            System.out.println(accessToken.getTokenType());
             return this.updateUserData(sessionId, accessToken);
         }
         return UserData.EMPTY;

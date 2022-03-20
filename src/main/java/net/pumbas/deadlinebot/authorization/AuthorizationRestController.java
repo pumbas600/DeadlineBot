@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.concurrent.ExecutionException;
-
 import javax.servlet.http.HttpSession;
 
 @RestController
@@ -39,13 +37,6 @@ public class AuthorizationRestController
     public RedirectView authorizeReset(HttpSession session) {
         this.authorizationService.updateAuthorizationState(session.getId(), AuthorizationState.UNAUTHORIZED);
         return new RedirectView("/authorization/authorize");
-    }
-
-    @GetMapping("/authorize/google")
-    public RedirectView authorizeGoogle(@RequestParam("id") String discordId) {
-        System.out.println("Authorizing: " + discordId);
-        String authorizationUrl = this.authorizationService.getAuthorizationUrl(discordId);
-        return new RedirectView(authorizationUrl);
     }
 
     @GetMapping("/authorize/discord")
@@ -76,7 +67,14 @@ public class AuthorizationRestController
         return new RedirectView("/authorization/unauthorized?error=Couldn't fetch user data");
     }
 
-    @GetMapping("/authorize/token")
+    @GetMapping("/authorize/google")
+    public RedirectView authorizeGoogle(@RequestParam("id") String discordId) {
+        System.out.println("Authorizing: " + discordId);
+        String authorizationUrl = this.authorizationService.getAuthorizationUrl(discordId);
+        return new RedirectView(authorizationUrl);
+    }
+
+    @GetMapping("/authorize/google/redirect")
     public RedirectView authorizeToken(@RequestParam(name = "state") String discordId,
                                        @RequestParam(name = "code", required = false) String code,
                                        HttpSession session

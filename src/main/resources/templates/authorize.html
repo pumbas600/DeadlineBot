@@ -69,27 +69,27 @@
             <div class="d-flex flex-column">
                 <div th:switch="${authorizationState}">
                     <div th:case="0">
+                        <div>
+                            Authorize Discord to confirm you own the account being linked to the Google calendar.
+                        </div>
                         <a th:href="${authorizeDiscordUrl}">
-                            <div class="btn btn-outline-primary">
+                            <div class="btn btn-outline-primary mt-2">
                                 Authorize Discord
                             </div>
                         </a>
-                        <div class="mt-2">
-                            Authorize Discord to confirm you own the account being linked to the Google calendar.
-                        </div>
                     </div>
                     <div th:case="1">
-                        <a th:href="${authorizeGoogleUrl}">
-                            <div class="btn btn-outline-primary">
-                                Authorize Google
-                            </div>
-                        </a>
-                        <div class="mt-2">
+                        <div>
                             Allow the Deadline bot to access your Google calendars. Your linked discord is: <b th:text="${discordTag}"></b>.
                             <br>
                             <br>
                             Not the right discord id? Click <a th:href="${authorizeResetUrl}">here</a> to reset.
                         </div>
+                        <a th:href="${authorizeGoogleUrl}">
+                            <div class="btn btn-outline-primary mt-2">
+                                Authorize Google
+                            </div>
+                        </a>
                     </div>
                     <div th:case="2">
                         <div class="alert alert-success d-flex flex-column" role="alert">
