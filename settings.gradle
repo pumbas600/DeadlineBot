@@ -8,5 +8,5 @@
  */
 
 rootProject.name = 'DeadlineBot'
-include 'Backend'
+include 'backend'
 

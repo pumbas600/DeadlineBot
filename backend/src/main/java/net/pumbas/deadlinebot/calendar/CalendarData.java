@@ -1,4 +1,4 @@
-package net.pumbas.deadlinebot.canvascalendar;
+package net.pumbas.deadlinebot.calendar;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

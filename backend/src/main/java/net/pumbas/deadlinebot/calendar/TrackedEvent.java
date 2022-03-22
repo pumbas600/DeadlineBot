@@ -1,4 +1,4 @@
-package net.pumbas.deadlinebot.canvascalendar;
+package net.pumbas.deadlinebot.calendar;
 
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;

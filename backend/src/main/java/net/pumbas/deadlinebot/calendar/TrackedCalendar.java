@@ -1,4 +1,4 @@
-package net.pumbas.deadlinebot.canvascalendar;
+package net.pumbas.deadlinebot.calendar;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @AllArgsConstructor
 public class TrackedCalendar
@@ -22,6 +23,10 @@ public class TrackedCalendar
 
     @Getter
     private final String summary;
+
+    @Getter
+    @Setter
+    private boolean isPublic;
 
     private final Set<String> courses;
 

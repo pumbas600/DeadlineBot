@@ -1,4 +1,4 @@
-package net.pumbas.deadlinebot.canvascalendar;
+package net.pumbas.deadlinebot.calendar;
 
 import net.pumbas.deadlinebot.App;
 import org.springframework.http.ResponseEntity;
