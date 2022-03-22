@@ -42,6 +42,15 @@ public class CalendarRestController
         return this.calendarService.listGoogleCalendars(discordId);
     }
 
+    @GetMapping("/deadlines/data")
+    public UserData getUserData() {
+        // TODO: Get userdata based on token used
+        UserData userData = new UserData("260930648330469387");
+        userData.getTrackedCalendars()
+            .add(new TrackedCalendar("260930648330469387", "-1", "Test", true, Set.of("SOFTENG 281")));
+        return userData;
+    }
+
     @GetMapping("/deadlines/calendar/{id}")
     public ResponseEntity<TrackedCalendar> getTrackedCalendar(@PathVariable String id) {
         TrackedCalendar trackedCalendar = this.calendarService.findById(id);
