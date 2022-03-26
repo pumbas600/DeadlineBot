@@ -16,6 +16,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import TrackedCourse from "./TrackedCourse";
 import {blue} from "@mui/material/colors";
 import LabelledControl from "./LabelledControl";
+import AddTrackedCourse from "./AddTrackedCourse";
 
 interface Props {
     trackedCalendar: TrackedCalendarData;
@@ -66,6 +67,9 @@ const TrackedCalendar: React.FC<Props> = (props) => {
                             <TrackedCourse key={course} course={course} removeCourse={removeCourse}/>
                         );
                     })}
+                    <ListItem disablePadding>
+                        <AddTrackedCourse onAdd={(course) => {}} />
+                    </ListItem>
                 </List>
             </Box>
 
