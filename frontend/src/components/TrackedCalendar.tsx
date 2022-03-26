@@ -15,6 +15,7 @@ import TrackedCalendarData from "../data/TrackedCalendarData";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import TrackedCourse from "./TrackedCourse";
 import {blue} from "@mui/material/colors";
+import LabelledControl from "./LabelledControl";
 
 interface Props {
     trackedCalendar: TrackedCalendarData;
@@ -46,16 +47,16 @@ const TrackedCalendar: React.FC<Props> = (props) => {
                 }
             />
             <Box sx={{ paddingY: 1, paddingX: 2 }}>
-                <FormGroup>
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={props.trackedCalendar.isPublic}
-                            />
-                        }
-                        label="Public"
+                <LabelledControl label="ID">
+                    <Typography variant="subtitle1" sx={{ marginRight: '9px' }}>
+                        {props.trackedCalendar.id}
+                    </Typography>
+                </LabelledControl>
+                <LabelledControl label="Public">
+                    <Checkbox
+                        checked={props.trackedCalendar.isPublic}
                     />
-                </FormGroup>
+                </LabelledControl>
                 <Typography variant="h6">
                     Tracked Courses
                 </Typography>

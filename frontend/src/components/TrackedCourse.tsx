@@ -1,6 +1,7 @@
 import React from "react";
-import {Box, IconButton, ListItem, Stack, Typography} from "@mui/material";
+import {IconButton, ListItem, Typography} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
+import {SpacedRow} from "./StyledComponents";
 
 interface Props {
     course: string;
@@ -10,22 +11,14 @@ interface Props {
 const TrackedCourse: React.FC<Props> = (props) => {
     return (
         <ListItem disablePadding>
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    width: '100%'
-                }}
-            >
+            <SpacedRow>
                 <Typography variant="subtitle1">
                     {props.course}
                 </Typography>
                 <IconButton>
                     <CloseIcon onClick={e => props.removeCourse(props.course)}/>
                 </IconButton>
-            </Box>
+            </SpacedRow>
 
         </ListItem>
     );
