@@ -1,5 +1,5 @@
 import React from "react";
-import {Box, Typography} from "@mui/material";
+import {Box, IconButton, ListItem, Stack, Typography} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 
 interface Props {
@@ -9,10 +9,25 @@ interface Props {
 
 const TrackedCourse: React.FC<Props> = (props) => {
     return (
-        <Box>
-            <Typography variant="h6">{props.course}</Typography>
-            <CloseIcon onClick={e => props.removeCourse(props.course)}/>
-        </Box>
+        <ListItem disablePadding>
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    width: '100%'
+                }}
+            >
+                <Typography variant="subtitle1">
+                    {props.course}
+                </Typography>
+                <IconButton>
+                    <CloseIcon onClick={e => props.removeCourse(props.course)}/>
+                </IconButton>
+            </Box>
+
+        </ListItem>
     );
 }
 

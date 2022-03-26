@@ -1,12 +1,28 @@
 import React from "react";
-import {Box, Card, Checkbox, Typography} from "@mui/material";
+import {
+    Box,
+    Card,
+    CardHeader,
+    Checkbox,
+    FormControlLabel,
+    FormGroup,
+    List,
+    ListItem,
+    Stack,
+    Typography
+} from "@mui/material";
 import TrackedCalendarData from "../data/TrackedCalendarData";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import TrackedCourse from "./TrackedCourse";
+import {blue} from "@mui/material/colors";
 
-const TrackedCalendar: React.FC<TrackedCalendarData> = (props) => {
+interface Props {
+    trackedCalendar: TrackedCalendarData;
+}
 
-    const [courses, setCourses] = React.useState<string[]>(props.courses);
+const TrackedCalendar: React.FC<Props> = (props) => {
+
+    const [courses, setCourses] = React.useState<string[]>(props.trackedCalendar.courses);
 
     function removeCourse(course: string) {
         setCourses((courses) => courses.filter((c) => c !== course));
@@ -14,25 +30,44 @@ const TrackedCalendar: React.FC<TrackedCalendarData> = (props) => {
 
     return (
         <Card>
-            <Box>
-                <CalendarMonthIcon/>
-                <Typography variant="h2">
-                    {props.summary}
+            <CardHeader
+                sx={{
+                    paddingY: 1.5,
+                    backgroundColor: blue[900],
+                    color: 'white',
+                }}
+                avatar={
+                    <CalendarMonthIcon/>
+                }
+                title={
+                    <Typography variant="h5">
+                        {props.trackedCalendar.summary}
+                    </Typography>
+                }
+            />
+            <Box sx={{ paddingY: 1, paddingX: 2 }}>
+                <FormGroup>
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={props.trackedCalendar.isPublic}
+                            />
+                        }
+                        label="Public"
+                    />
+                </FormGroup>
+                <Typography variant="h6">
+                    Tracked Courses
                 </Typography>
+                <List>
+                    {courses.map((course: string) => {
+                        return (
+                            <TrackedCourse key={course} course={course} removeCourse={removeCourse}/>
+                        );
+                    })}
+                </List>
             </Box>
-            <Box>
-                <Typography variant="h4">
-                    Public
-                </Typography>
-                <Checkbox checked={props.isPublic}/>
-            </Box>
-            <Box>
-                {courses.map((course: string) => {
-                    return (
-                        <TrackedCourse course={course} removeCourse={removeCourse}/>
-                    );
-                })}
-            </Box>
+
         </Card>
     );
 }
