@@ -4,21 +4,34 @@ import {IconButton, TextField} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 
 interface Props {
-    onAdd: (course: string) => void;
+    addCourse: (course: string) => boolean;
+}
+
+interface State {
+    course: string;
+    error: string;
 }
 
 const AddTrackedCourse: React.FC<Props> = (props) => {
 
-    const [courseName, setCourseName] = useState<string>('');
+    const coursePattern = /([a-zA-Z]+) ?(\w*[\d]+\w*)/g
+    const [state, setState] = useState<State>({ course: '', error: '' });
 
     function handleInput(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
-        setCourseName(e.target.value);
+        setState({ course: e.target.value, error: '' });
     }
 
     function handleSubmit() {
-        if (courseName.length !== 0) {
-            props.onAdd(courseName);
-            setCourseName('');
+        if (state.course.length !== 0) {
+            const match = coursePattern.exec(state.course);
+            if (match) {
+                const formattedCourseName = `${match[1].toUpperCase()} ${match[2]}`;
+                if (!props.addCourse(formattedCourseName)) {
+                    setState({ ...state, error: 'That course is already tracked' });
+                }
+                else setState({ course: '', error: '' });
+            }
+            else setState({ ...state, error: 'Should be formatted like: SOFTENG 281' });
         }
     }
 
@@ -29,10 +42,15 @@ const AddTrackedCourse: React.FC<Props> = (props) => {
                 size="small"
                 label="Course Name"
                 variant="outlined"
-                value={courseName}
+                value={state.course}
+                error={state.error.length !== 0}
+                helperText={state.error}
+                sx={{
+                    width: '100%'
+                }}
             />
             <IconButton
-                disabled={courseName.length === 0}
+                disabled={state.course.length === 0}
                 onClick={e => handleSubmit()}
             >
                 <AddIcon />

@@ -3,7 +3,7 @@ import {
     Box,
     Card,
     CardHeader,
-    Checkbox, Fab, IconButton,
+    Checkbox, IconButton,
     List,
     ListItem,
     Typography
@@ -23,14 +23,24 @@ interface Props {
 
 const TrackedCalendar: React.FC<Props> = (props) => {
 
-    const [courses, setCourses] = React.useState<string[]>(props.trackedCalendar.courses);
+    const [courses, setCourses] = React.useState<string[]>(props.trackedCalendar.courses.sort());
 
     function removeCourse(course: string) {
         setCourses((courses) => courses.filter((c) => c !== course));
     }
 
+    function addCourse(course: string): boolean {
+        if (courses.filter((c) => c === course).length !== 0)
+            return false;
+
+        setCourses([ ...courses, course ].sort());
+        return true;
+    }
+
     return (
-        <Card>
+        <Card sx={{
+            width: '400px'
+        }}>
             <CardHeader
                 sx={{
                     paddingY: 1.5,
@@ -73,7 +83,7 @@ const TrackedCalendar: React.FC<Props> = (props) => {
                         );
                     })}
                     <ListItem disablePadding>
-                        <AddTrackedCourse onAdd={(course) => {}} />
+                        <AddTrackedCourse addCourse={addCourse} />
                     </ListItem>
                 </List>
             </Box>
