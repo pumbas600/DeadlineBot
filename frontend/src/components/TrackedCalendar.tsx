@@ -3,12 +3,9 @@ import {
     Box,
     Card,
     CardHeader,
-    Checkbox,
-    FormControlLabel,
-    FormGroup,
+    Checkbox, Fab, IconButton,
     List,
     ListItem,
-    Stack,
     Typography
 } from "@mui/material";
 import TrackedCalendarData from "../data/TrackedCalendarData";
@@ -17,6 +14,8 @@ import TrackedCourse from "./TrackedCourse";
 import {blue} from "@mui/material/colors";
 import LabelledControl from "./LabelledControl";
 import AddTrackedCourse from "./AddTrackedCourse";
+import CloseIcon from '@mui/icons-material/Close';
+import {SpacedRow} from "./StyledComponents";
 
 interface Props {
     trackedCalendar: TrackedCalendarData;
@@ -42,9 +41,15 @@ const TrackedCalendar: React.FC<Props> = (props) => {
                     <CalendarMonthIcon/>
                 }
                 title={
-                    <Typography variant="h5">
-                        {props.trackedCalendar.summary}
-                    </Typography>
+                    <SpacedRow>
+                        <Typography variant="h5">
+                            {props.trackedCalendar.summary}
+                        </Typography>
+                        <IconButton>
+                            <CloseIcon sx={{ color: 'white' }} />
+                        </IconButton>
+                    </SpacedRow>
+
                 }
             />
             <Box sx={{ paddingY: 1, paddingX: 2 }}>
@@ -72,7 +77,6 @@ const TrackedCalendar: React.FC<Props> = (props) => {
                     </ListItem>
                 </List>
             </Box>
-
         </Card>
     );
 }
