@@ -14,8 +14,8 @@ import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 
-//@Configuration
-//@EnableWebSecurity
+@Configuration
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
     // Reference: https://auth0.com/blog/spring-boot-authorization-tutorial-secure-an-api-java
@@ -27,11 +27,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+//        http.authorizeRequests()
+//            .mvcMatchers(HttpMethod.GET, "/authorization/**")
+//            .permitAll()
+//            .anyRequest()
+//            .authenticated();
         http.authorizeRequests()
-            .mvcMatchers(HttpMethod.GET, "/authorization/**")
-            .permitAll()
             .anyRequest()
-            .authenticated();
+            .permitAll();
+
     }
 
     private JwtDecoder jwtDecoder() {
@@ -39,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 
         OAuth2TokenValidator<Jwt> validator = new DelegatingOAuth2TokenValidator<>(withIssuer);
 
-        NimbusJwtDecoder jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuer);
+        NimbusJwtDecoder jwtDecoder = JwtDecoders.fromOidcIssuerLocation(this.issuer);
         jwtDecoder.setJwtValidator(validator);
         return jwtDecoder;
     }
