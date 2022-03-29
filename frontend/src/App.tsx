@@ -1,18 +1,25 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import TrackedCalendar from "./components/TrackedCalendar";
-import TrackedCalendarData from './data/TrackedCalendarData';
 import {Box, Fab, List, ListItem, Tooltip} from "@mui/material";
+import UserData from "./data/UserData";
+import axios from "axios";
+import {API} from "./config/AppConfig";
 
 function App() {
 
-    const trackedCalendar: TrackedCalendarData = {
-        id: '12843782394',
-        ownerId: '260930648330469387',
-        summary: 'Demo Calendar',
-        isPublic: true,
-        courses: ['SOFTENG 281', 'ENGSCI 211']
-    };
+    const [userData, setUserData] = useState<UserData>({ linkedDiscordId: '-1', trackedCalendars: [] });
+
+    useEffect(() => {
+        async function fetchUserData() {
+            const response = await axios.get<UserData>(API + '/deadlines/data');
+            console.log(response);
+
+            setUserData(response.data);
+        }
+
+        fetchUserData();
+    }, []);
 
     return (
         <div className="App">
@@ -32,9 +39,13 @@ function App() {
                     }}
                 >
                     <List sx={{ width: '100%' }}>
-                        <ListItem>
-                            <TrackedCalendar trackedCalendar={trackedCalendar}/>
-                        </ListItem>
+                        {userData.trackedCalendars.map((trackedCalendar) => {
+                            return (
+                                <ListItem>
+                                    <TrackedCalendar trackedCalendar={trackedCalendar}/>
+                                </ListItem>
+                            );
+                        })}
                     </List>
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end'}}>
                         <Tooltip title="Track another calendar" placement="left" arrow>
