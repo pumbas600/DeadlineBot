@@ -42,7 +42,7 @@ public class TrackedCalendar
     }
 
     public boolean isTracked(String eventSummary) {
-        return courses.stream()
+        return this.courses.stream()
             .anyMatch(subject -> eventSummary.endsWith(subject + "]"));
     }
 
@@ -81,6 +81,6 @@ public class TrackedCalendar
      * @see TrackedCalendar#addCourse(String)
      */
     public Set<String> getCourses() {
-        return Collections.unmodifiableSet(courses);
+        return Collections.unmodifiableSet(this.courses);
     }
 }

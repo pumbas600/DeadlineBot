@@ -39,7 +39,7 @@ const TrackedCalendar: React.FC<Props> = (props) => {
 
     return (
         <Card sx={{
-            width: '400px'
+            width: '350px'
         }}>
             <CardHeader
                 sx={{
