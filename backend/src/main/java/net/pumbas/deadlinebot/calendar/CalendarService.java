@@ -24,11 +24,18 @@ import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class CalendarService
 {
+    private static final Pattern COURSE_EVENT_PATTERN = Pattern.compile(".*\\[(.+)]");
+
     private final Map<String, TrackedCalendar> trackedCalendars = new ConcurrentHashMap<>();
 
     private final NetHttpTransport httpTransport;
@@ -40,6 +47,33 @@ public class CalendarService
         this.jsonFactory = GsonFactory.getDefaultInstance();
 
         this.authorizationService = authorizationService;
+    }
+
+    public UserData generateInitialUserData(String discordId) {
+        UserData userData = new UserData(discordId);
+        CalendarData calendarData = this.attemptToIdentifyCanvasCalendar(discordId);
+        if (calendarData != null) {
+            Set<String> courses = this.identifyCourses(discordId, calendarData.getId());
+            TrackedCalendar trackedCalendar = new TrackedCalendar(discordId, calendarData);
+            trackedCalendar.addCourses(courses);
+
+            userData.getTrackedCalendars().add(trackedCalendar);
+        }
+        return userData;
+    }
+
+    public Set<String> identifyCourses(String discordId, String calendarId) {
+        return this.listEventsBefore(discordId, calendarId, OffsetDateTime.now().plusMonths(1))
+            .stream()
+            .map(event -> {
+                Matcher matcher = COURSE_EVENT_PATTERN.matcher(event.getSummary());
+                if (matcher.matches()) {
+                    return matcher.group(1);
+                }
+                return null;
+            })
+            .filter(Objects::nonNull)
+            .collect(Collectors.toSet());
     }
 
     public List<TrackedEvent> listTrackedEventsBefore(
@@ -154,7 +188,7 @@ public class CalendarService
     }
 
     private Calendar getService(String discordId) throws UnauthorizedAccessException {
-        Credential credential = authorizationService.getCredentials(discordId);
+        Credential credential = this.authorizationService.getCredentials(discordId);
         // The user hasn't authorized Deadline Bot
         if (credential == null)
             throw new UnauthorizedAccessException("The user " + discordId + " is unauthorized!");
