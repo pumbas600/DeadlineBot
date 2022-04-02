@@ -35,9 +35,9 @@ public class AuthorizationController
 
         AuthorizationState authorizationState = this.authorizationService.getAuthorizationState(session.getId());
         model.addAttribute("authorizationState", authorizationState.ordinal());
-        model.addAttribute("authorizeDiscordUrl", App.V1 + "/authorize/discord");
-        model.addAttribute("authorizeResetUrl", App.V1 + "/authorize/reset");
-        model.addAttribute("authorizeGoogleUrl", App.V1 + "/authorize/google?id=" + userData.getId());
+        model.addAttribute("authorizeDiscordUrl", App.API_V1 + "/authorize/discord");
+        model.addAttribute("authorizeResetUrl", App.API_V1 + "/authorize/reset");
+        model.addAttribute("authorizeGoogleUrl", App.API_V1 + "/authorize/google?id=" + userData.getId());
         model.addAttribute("discordId", userData.getId());
         model.addAttribute("discordTag", userData.getTag());
 

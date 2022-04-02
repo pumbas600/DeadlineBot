@@ -10,20 +10,24 @@ function App() {
 
     const [userData, setUserData] = useState<UserData>({ linkedDiscordId: '-1', trackedCalendars: [] });
 
-    // useEffect(() => {
-    //     async function fetchUserData() {
-    //         const response = await axios.get<UserData>(API + '/deadlines/data', {
-    //             headers: {
-    //                 "Access-Control-Allow-Origin": "*"
-    //             }
-    //         });
-    //         console.log(response);
-    //
-    //         setUserData(response.data);
-    //     }
-    //
-    //     fetchUserData();
-    // }, []);
+    useEffect(() => {
+        async function fetchUserData() {
+            try {
+                const response = await axios.get<UserData>(API + '/deadlines/data', {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*"
+                    }
+                });
+                console.log(response);
+
+                setUserData(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        fetchUserData();
+    }, []);
 
     return (
         <div className="App">

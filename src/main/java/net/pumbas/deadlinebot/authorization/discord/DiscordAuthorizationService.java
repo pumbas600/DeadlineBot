@@ -33,7 +33,7 @@ import javax.servlet.http.HttpSession;
 public class DiscordAuthorizationService
 {
     public static final List<String> DISCORD_SCOPES = List.of("identify");
-    public static final String REDIRECT_URL = "http://localhost:8080" + App.V1 + "/authorize/discord/redirect";
+    public static final String REDIRECT_URL = "http://localhost:8080" + App.API_V1 + "/authorize/discord/redirect";
 
     private final Map<String, UserData> userData = new ConcurrentHashMap<>();
 

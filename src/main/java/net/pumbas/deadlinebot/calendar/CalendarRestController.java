@@ -17,7 +17,7 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping(App.V1)
+@RequestMapping(App.API_V1)
 public class CalendarRestController
 {
     private final CalendarService calendarService;

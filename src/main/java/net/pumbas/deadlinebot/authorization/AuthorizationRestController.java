@@ -14,7 +14,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping(App.V1)
+@RequestMapping(App.API_V1)
 public class AuthorizationRestController
 {
     private final AuthorizationService authorizationService;

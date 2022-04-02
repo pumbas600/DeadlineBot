@@ -33,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class AuthorizationService
 {
-    public static final String AUTHORIZE_REDIRECT_URL = "http://localhost:8080" + App.V1 + "/authorize/token";
+    public static final String AUTHORIZE_REDIRECT_URL = "http://localhost:8080" + App.API_V1 + "/authorize/token";
 
     public static final String TOKENS_FILE_PATH = "tokens";
     public static final String CREDENTIALS_FILE_PATH = "credentials.json";
