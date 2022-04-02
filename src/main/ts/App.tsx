@@ -4,7 +4,7 @@ import TrackedCalendar from "./components/TrackedCalendar";
 import {Box, Fab, List, ListItem, Tooltip} from "@mui/material";
 import UserData from "./data/UserData";
 import axios from "axios";
-import {API} from "./config/AppConfig";
+import {API_PREFIX} from "./config/AppConfig";
 
 function App() {
 
@@ -13,16 +13,10 @@ function App() {
     useEffect(() => {
         async function fetchUserData() {
             try {
-                const response = await axios.get<UserData>(API + '/deadlines/data', {
-                    headers: {
-                        "Access-Control-Allow-Origin": "*"
-                    }
-                });
-                console.log(response);
-
+                const response = await axios.get<UserData>(API_PREFIX + '/deadlines/data');
                 setUserData(response.data);
             } catch (error) {
-                console.log(error);
+                console.error(error);
             }
         }
 
@@ -49,7 +43,7 @@ function App() {
                     <List sx={{ width: '100%' }}>
                         {userData.trackedCalendars.map((trackedCalendar) => {
                             return (
-                                <ListItem>
+                                <ListItem key={trackedCalendar.id}>
                                     <TrackedCalendar trackedCalendar={trackedCalendar}/>
                                 </ListItem>
                             );

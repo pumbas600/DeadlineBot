@@ -15,8 +15,8 @@ const TrackedCourse: React.FC<Props> = (props) => {
                 <Typography variant="subtitle1">
                     {props.course}
                 </Typography>
-                <IconButton>
-                    <CloseIcon onClick={e => props.removeCourse(props.course)}/>
+                <IconButton onClick={e => props.removeCourse(props.course)}>
+                    <CloseIcon/>
                 </IconButton>
             </SpacedRow>
 
