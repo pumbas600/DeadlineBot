@@ -4,6 +4,7 @@ import net.pumbas.deadlinebot.App;
 import net.pumbas.deadlinebot.exceptions.MissingResourceException;
 import net.pumbas.deadlinebot.exceptions.UnauthorizedAccessException;
 import net.pumbas.deadlinebot.models.calendar.CalendarData;
+import net.pumbas.deadlinebot.services.CalendarService;
 import net.pumbas.deadlinebot.services.CalendarServiceImpl;
 import net.pumbas.deadlinebot.models.calendar.TrackedCalendar;
 import net.pumbas.deadlinebot.models.calendar.TrackedEvent;
@@ -25,25 +26,18 @@ import java.util.List;
 @RequestMapping(App.API_V1)
 public class CalendarController
 {
-    private final CalendarServiceImpl calendarService;
+    private final CalendarService calendarService;
 
-    public CalendarController(CalendarServiceImpl calendarService) {
+    public CalendarController(CalendarService calendarService) {
         this.calendarService = calendarService;
     }
 
     // For testing
     @GetMapping("/calendars/canvas")
-    public ResponseEntity<TrackedCalendar> getCanvasCalendar(
-        @RequestHeader(HttpHeaders.AUTHORIZATION) String discordId
-    ) {
-        discordId = "260930648330469387";
+    public ResponseEntity<TrackedCalendar> getCanvasCalendar() {
+        String discordId = "260930648330469387";
         TrackedCalendar calendar = this.calendarService.determineInitialCalendar(discordId);
         return ResponseEntity.ok(calendar);
-    }
-
-    @GetMapping("/google/{discordId}/calendars")
-    public List<CalendarData> getGoogleCalendars(@PathVariable String discordId) {
-        return this.calendarService.listGoogleCalendars(discordId);
     }
 
     @GetMapping("/calendars/{calendarId}")
