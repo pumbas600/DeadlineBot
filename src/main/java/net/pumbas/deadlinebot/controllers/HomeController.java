@@ -1,4 +1,4 @@
-package net.pumbas.deadlinebot;
+package net.pumbas.deadlinebot.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,4 +1,4 @@
-package net.pumbas.deadlinebot.calendar;
+package net.pumbas.deadlinebot.services;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -14,6 +14,10 @@ import com.google.api.services.calendar.model.Events;
 import net.pumbas.deadlinebot.App;
 import net.pumbas.deadlinebot.authorization.AuthorizationService;
 import net.pumbas.deadlinebot.authorization.UnauthorizedAccessException;
+import net.pumbas.deadlinebot.models.calendar.CalendarData;
+import net.pumbas.deadlinebot.models.calendar.TrackedCalendar;
+import net.pumbas.deadlinebot.models.calendar.TrackedEvent;
+import net.pumbas.deadlinebot.models.calendar.UserData;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.stereotype.Service;

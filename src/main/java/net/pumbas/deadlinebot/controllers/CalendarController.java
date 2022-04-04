@@ -1,6 +1,12 @@
-package net.pumbas.deadlinebot.calendar;
+package net.pumbas.deadlinebot.controllers;
 
 import net.pumbas.deadlinebot.App;
+import net.pumbas.deadlinebot.models.calendar.CalendarData;
+import net.pumbas.deadlinebot.services.CalendarService;
+import net.pumbas.deadlinebot.models.calendar.TrackedCalendar;
+import net.pumbas.deadlinebot.models.calendar.TrackedEvent;
+import net.pumbas.deadlinebot.models.calendar.UserData;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,11 +24,11 @@ import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping(App.API_V1)
-public class CalendarRestController
+public class CalendarController
 {
     private final CalendarService calendarService;
 
-    public CalendarRestController(CalendarService calendarService) {
+    public CalendarController(CalendarService calendarService) {
         this.calendarService = calendarService;
     }
 

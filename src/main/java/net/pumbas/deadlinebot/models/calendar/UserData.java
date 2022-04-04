@@ -1,4 +1,4 @@
-package net.pumbas.deadlinebot.calendar;
+package net.pumbas.deadlinebot.models.calendar;
 
 import java.util.ArrayList;
 import java.util.List;
