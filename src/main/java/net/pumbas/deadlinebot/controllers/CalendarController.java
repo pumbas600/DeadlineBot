@@ -2,7 +2,7 @@ package net.pumbas.deadlinebot.controllers;
 
 import net.pumbas.deadlinebot.App;
 import net.pumbas.deadlinebot.models.calendar.CalendarData;
-import net.pumbas.deadlinebot.services.CalendarService;
+import net.pumbas.deadlinebot.services.CalendarServiceImpl;
 import net.pumbas.deadlinebot.models.calendar.TrackedCalendar;
 import net.pumbas.deadlinebot.models.calendar.TrackedEvent;
 import net.pumbas.deadlinebot.models.calendar.UserData;
@@ -26,9 +26,9 @@ import javax.servlet.http.HttpSession;
 @RequestMapping(App.API_V1)
 public class CalendarController
 {
-    private final CalendarService calendarService;
+    private final CalendarServiceImpl calendarService;
 
-    public CalendarController(CalendarService calendarService) {
+    public CalendarController(CalendarServiceImpl calendarService) {
         this.calendarService = calendarService;
     }
 
@@ -65,7 +65,7 @@ public class CalendarController
 
     @GetMapping("/deadlines/{discordId}/calendars/")
     public List<TrackedCalendar> getTrackedCalendars(@PathVariable String discordId) {
-        return this.calendarService.listTrackedCalendars(discordId);
+        return this.calendarService.listAllOwnedBy(discordId);
     }
 
     @PostMapping("/deadlines/calendars")
@@ -89,7 +89,7 @@ public class CalendarController
         calendar.addCourses(Set.of(blacklistedSubjects.split(",")));
         OffsetDateTime end = OffsetDateTime.now().plusWeeks(1);
 
-        List<TrackedEvent> events =  this.calendarService.listTrackedEventsBefore(discordId, calendar, end);
+        List<TrackedEvent> events =  this.calendarService.listEventsBefore(discordId, calendar.getId(), end);
         return ResponseEntity.ok(events);
     }
 }

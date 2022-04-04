@@ -1,4 +1,4 @@
-package net.pumbas.deadlinebot.authorization;
+package net.pumbas.deadlinebot.exceptions;
 
 import net.pumbas.deadlinebot.common.Message;
 
