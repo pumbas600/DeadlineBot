@@ -1,6 +1,6 @@
 package net.pumbas.deadlinebot.services.course;
 
-import net.pumbas.deadlinebot.models.calendar.Course;
+import net.pumbas.deadlinebot.models.Course;
 
 import java.util.List;
 

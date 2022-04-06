@@ -1,7 +1,7 @@
 package net.pumbas.deadlinebot.controllers;
 
 import net.pumbas.deadlinebot.App;
-import net.pumbas.deadlinebot.models.calendar.Course;
+import net.pumbas.deadlinebot.models.Course;
 import net.pumbas.deadlinebot.services.course.CourseService;
 
 import org.springframework.http.HttpHeaders;
