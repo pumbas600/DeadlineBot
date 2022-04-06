@@ -29,6 +29,7 @@ hs_err_pid*
 credentials.json
 discord_credentials.json
 tokens/
+application.properties
 
 # Ignore Gradle build output directory
 build

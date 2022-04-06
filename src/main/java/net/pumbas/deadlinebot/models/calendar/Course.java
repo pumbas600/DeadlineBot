@@ -1,18 +1,21 @@
 package net.pumbas.deadlinebot.models.calendar;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 @AllArgsConstructor
+@Document("courses")
 public class Course
 {
-    private Long courseId; // Generated
-    private final String courseName;
-    private final boolean isPublic;
+    @Id
+    private String courseId;
 
-    public Course(String courseName, boolean isPublic) {
-        this.courseName = courseName;
-        this.isPublic = isPublic;
-    }
+    private String courseName;
+    private boolean isPublic;
 }
