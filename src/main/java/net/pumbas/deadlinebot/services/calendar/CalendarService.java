@@ -1,4 +1,4 @@
-package net.pumbas.deadlinebot.services;
+package net.pumbas.deadlinebot.services.calendar;
 
 import net.pumbas.deadlinebot.exceptions.MissingResourceException;
 import net.pumbas.deadlinebot.exceptions.UnauthorizedAccessException;

@@ -3,9 +3,7 @@ package net.pumbas.deadlinebot.controllers;
 import net.pumbas.deadlinebot.App;
 import net.pumbas.deadlinebot.exceptions.MissingResourceException;
 import net.pumbas.deadlinebot.exceptions.UnauthorizedAccessException;
-import net.pumbas.deadlinebot.models.calendar.CalendarData;
-import net.pumbas.deadlinebot.services.CalendarService;
-import net.pumbas.deadlinebot.services.CalendarServiceImpl;
+import net.pumbas.deadlinebot.services.calendar.CalendarService;
 import net.pumbas.deadlinebot.models.calendar.TrackedCalendar;
 import net.pumbas.deadlinebot.models.calendar.TrackedEvent;
 
