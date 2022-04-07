@@ -13,7 +13,7 @@ import com.google.api.services.calendar.model.Events;
 
 import net.pumbas.deadlinebot.App;
 import net.pumbas.deadlinebot.authorization.AuthorizationService;
-import net.pumbas.deadlinebot.exceptions.MissingResourceException;
+import net.pumbas.deadlinebot.exceptions.ResourceNotFoundException;
 import net.pumbas.deadlinebot.exceptions.UnauthorizedAccessException;
 import net.pumbas.deadlinebot.models.calendar.CalendarData;
 import net.pumbas.deadlinebot.models.calendar.TrackedCalendar;
@@ -57,9 +57,9 @@ public class CalendarServiceImpl implements CalendarService
 
     @Override
     public TrackedCalendar findById(String discordId, String calendarId)
-        throws UnauthorizedAccessException, MissingResourceException {
+        throws UnauthorizedAccessException, ResourceNotFoundException {
         if (!this.trackedCalendars.containsKey(calendarId))
-            throw new MissingResourceException("There is no tracked calendar with the id " + calendarId);
+            throw new ResourceNotFoundException("There is no tracked calendar with the id " + calendarId);
 
         TrackedCalendar trackedCalendar = this.trackedCalendars.get(calendarId);
         if (trackedCalendar.getOwnerId().equals(discordId) || trackedCalendar.isPublic())
@@ -83,7 +83,7 @@ public class CalendarServiceImpl implements CalendarService
         String discordId,
         String calendarId,
         OffsetDateTime end
-    ) throws UnauthorizedAccessException, MissingResourceException {
+    ) throws UnauthorizedAccessException, ResourceNotFoundException {
         TrackedCalendar trackedCalendar = this.findById(discordId, calendarId);
 
         return this.fetchEventsBefore(discordId, calendarId, end)
@@ -95,7 +95,7 @@ public class CalendarServiceImpl implements CalendarService
 
     @Override
     public Set<String> listCourses(String discordId, String calendarId)
-        throws UnauthorizedAccessException, MissingResourceException {
+        throws UnauthorizedAccessException, ResourceNotFoundException {
         TrackedCalendar trackedCalendar = this.findById(discordId, calendarId);
         return trackedCalendar.getCourses();
     }

@@ -1,7 +1,7 @@
 package net.pumbas.deadlinebot.controllers;
 
 import net.pumbas.deadlinebot.App;
-import net.pumbas.deadlinebot.exceptions.MissingResourceException;
+import net.pumbas.deadlinebot.exceptions.ResourceNotFoundException;
 import net.pumbas.deadlinebot.exceptions.UnauthorizedAccessException;
 import net.pumbas.deadlinebot.services.calendar.CalendarService;
 import net.pumbas.deadlinebot.models.calendar.TrackedCalendar;
@@ -46,7 +46,7 @@ public class CalendarController
         try {
             TrackedCalendar trackedCalendar = this.calendarService.findById(discordId, calendarId);
             return ResponseEntity.ok(trackedCalendar);
-        } catch (UnauthorizedAccessException | MissingResourceException e) {
+        } catch (UnauthorizedAccessException | ResourceNotFoundException e) {
             // Don't tell the user that the calendar doesn't exist. They don't need to know
             return ResponseEntity.badRequest().build();
         }
@@ -74,7 +74,7 @@ public class CalendarController
             OffsetDateTime end = OffsetDateTime.now().plusWeeks(1);
             List<TrackedEvent> events = this.calendarService.listEventsBefore(discordId, calendarId, end);
             return ResponseEntity.ok(events);
-        } catch (UnauthorizedAccessException | MissingResourceException e) {
+        } catch (UnauthorizedAccessException | ResourceNotFoundException e) {
             // Don't tell the user that the calendar doesn't exist. They don't need to know
             return ResponseEntity.badRequest().build();
         }

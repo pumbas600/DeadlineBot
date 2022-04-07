@@ -24,6 +24,6 @@ public class CourseController
 
     @GetMapping("courses/")
     public List<Course> getCourses(@RequestHeader(HttpHeaders.AUTHORIZATION) String discordId) {
-        return this.courseService.listAllTrackedBy(discordId);
+        return this.courseService.findAllTrackedBy(discordId);
     }
 }
