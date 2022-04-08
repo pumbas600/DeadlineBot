@@ -1,5 +1,6 @@
 package net.pumbas.deadlinebot.services.course;
 
+import net.pumbas.deadlinebot.exceptions.BadRequestException;
 import net.pumbas.deadlinebot.exceptions.ResourceNotFoundException;
 import net.pumbas.deadlinebot.models.Course;
 
@@ -13,9 +14,9 @@ public interface CourseService
 
     Course findById(String courseId) throws ResourceNotFoundException;
 
-    Course save(Course course);
+    Course save(Course course) throws BadRequestException;
 
-    List<Course> saveAll(Iterable<Course> courses);
+    Course update(Course course) throws BadRequestException;
 
     void deleteById(String courseId, String discordId) throws ResourceNotFoundException;
 

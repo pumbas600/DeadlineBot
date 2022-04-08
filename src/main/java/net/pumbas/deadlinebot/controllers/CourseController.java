@@ -41,7 +41,7 @@ public class CourseController
     @GetMapping("/courses/{courseId}")
     public Course getCourse(@PathVariable String courseId, @RequestParam("discord_id") String discordId) {
         Course course = this.courseService.findById(courseId);
-        if (course.isPublic() || course.getOwnerId().equals(discordId))
+        if (course.trackableBy(discordId))
             return course;
         throw new UnauthorizedAccessException("The course with the id %s is not public".formatted(courseId));
     }
@@ -61,9 +61,9 @@ public class CourseController
         newCourse.setOwnerId(discordId);
         try {
             Course course = this.courseService.findById(courseId);
-            if (course.isPublic() || course.getOwnerId().equals(discordId)) {
+            if (course.isOwner(discordId)) {
                 newCourse.setId(course.getId());
-                return this.courseService.save(newCourse);
+                return this.courseService.update(newCourse);
             }
             else throw new UnauthorizedAccessException("You aren't the owner of the course %s so you cannot update it"
                 .formatted(courseId));

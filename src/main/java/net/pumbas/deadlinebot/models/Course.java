@@ -28,4 +28,12 @@ public class Course
     @Field("is_public")
     @JsonProperty("is_public")
     private boolean isPublic;
+
+    public boolean trackableBy(String discordId) {
+        return this.isPublic || this.isOwner(discordId);
+    }
+
+    public boolean isOwner(String discordId) {
+        return this.ownerId.equals(discordId);
+    }
 }

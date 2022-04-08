@@ -1,17 +1,24 @@
 package net.pumbas.deadlinebot.services.course;
 
+import net.pumbas.deadlinebot.exceptions.BadRequestException;
 import net.pumbas.deadlinebot.exceptions.ResourceNotFoundException;
 import net.pumbas.deadlinebot.models.Course;
 import net.pumbas.deadlinebot.repositories.CourseRepository;
 import net.pumbas.deadlinebot.repositories.CourseTemplateRepository;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.IllegalFormatException;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class CourseServiceImpl implements CourseService
 {
+    private final static Pattern COURSE_NAME_PATTERN = Pattern.compile("([a-zA-Z]+) ?(\\w*[\\d]+\\w*)");
+
     private final CourseRepository courseRepository;
     private final CourseTemplateRepository courseTemplateRepository;
 
@@ -37,14 +44,16 @@ public class CourseServiceImpl implements CourseService
     }
 
     @Override
-    public Course save(Course course) {
-        // TODO: Verify the courses matches the correct format and is capitalised
+    public Course save(Course course) throws BadRequestException {
+        this.formatCourseName(course);
         return this.courseRepository.save(course);
     }
 
     @Override
-    public List<Course> saveAll(Iterable<Course> courses) {
-        return this.courseRepository.saveAll(courses);
+    public Course update(Course course) throws BadRequestException {
+        this.formatCourseName(course);
+        // TODO: If the course is being made private, delete any references to it
+        return this.courseRepository.save(course);
     }
 
     @Override
@@ -57,5 +66,13 @@ public class CourseServiceImpl implements CourseService
     public void delete(Course course) {
         this.courseRepository.delete(course);
         // TODO: Delete references in User database -
+    }
+
+    private void formatCourseName(Course course) throws BadRequestException {
+        Matcher matcher = COURSE_NAME_PATTERN.matcher(course.getName());
+        if (matcher.matches()) {
+            course.setName("%s %s".formatted(matcher.group(1), matcher.group(2)).toUpperCase());
+        }
+        else throw new BadRequestException("The course name %s doesn't match the correct format: SOFTENG 281");
     }
 }
