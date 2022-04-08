@@ -51,5 +51,6 @@ public class CourseServiceImpl implements CourseService
     @Override
     public void delete(Course course) {
         this.courseRepository.delete(course);
+        // TODO: Delete references in User database
     }
 }
