@@ -17,7 +17,7 @@ public interface CourseService
 
     List<Course> saveAll(Iterable<Course> courses);
 
-    void deleteById(String courseId, String discordId);
+    void deleteById(String courseId, String discordId) throws ResourceNotFoundException;
 
     void delete(Course course);
 }

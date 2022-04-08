@@ -17,11 +17,13 @@ public class CourseTemplateRepositoryImpl implements CourseTemplateRepository
     }
 
     @Override
-    public void deleteCourseWithIdAndOwnedBy(String courseId, String discordId) {
+    public boolean deleteCourseWithIdAndOwnedBy(String courseId, String discordId) {
         Query query = Query.query(Criteria.where("id").is(courseId).and("owner_id").is(discordId));
         Course course = this.template.findAndRemove(query, Course.class);
         if (course != null) {
             // Delete references in user collection
         }
+
+        return course != null;
     }
 }

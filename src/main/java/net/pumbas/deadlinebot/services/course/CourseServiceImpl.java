@@ -48,8 +48,9 @@ public class CourseServiceImpl implements CourseService
     }
 
     @Override
-    public void deleteById(String courseId, String discordId) {
-        this.courseTemplateRepository.deleteCourseWithIdAndOwnedBy(courseId, discordId);
+    public void deleteById(String courseId, String discordId) throws ResourceNotFoundException {
+        if (!this.courseTemplateRepository.deleteCourseWithIdAndOwnedBy(courseId, discordId))
+            throw new ResourceNotFoundException("There is no course owned by you with the id " + courseId);
     }
 
     @Override

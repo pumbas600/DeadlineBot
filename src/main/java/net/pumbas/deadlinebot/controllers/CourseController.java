@@ -43,7 +43,7 @@ public class CourseController
         Course course = this.courseService.findById(courseId);
         if (course.isPublic() || course.getOwnerId().equals(discordId))
             return course;
-        throw new UnauthorizedAccessException("There's no course with the id " + courseId);
+        throw new UnauthorizedAccessException("The course with the id %s is not public".formatted(courseId));
     }
 
     @PostMapping("/courses")
