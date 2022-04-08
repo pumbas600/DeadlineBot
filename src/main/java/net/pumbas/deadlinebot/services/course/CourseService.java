@@ -12,6 +12,8 @@ public interface CourseService
 
     List<Course> findAllOwnedBy(String discordId);
 
+    List<Course> findAllWithName(String courseName);
+
     Course findById(String courseId) throws ResourceNotFoundException;
 
     Course save(Course course) throws BadRequestException;

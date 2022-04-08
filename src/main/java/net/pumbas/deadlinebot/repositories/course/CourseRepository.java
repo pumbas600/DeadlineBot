@@ -12,5 +12,6 @@ public interface CourseRepository extends MongoRepository<Course, String>
     @Query("{owner_id:'?0'}")
     List<Course> findCoursesOwnedBy(String discordId);
 
-
+    @Query("{is_public:true, name:{$regex:'?0'}}")
+    List<Course> findPublicCoursesWithNameLike(String courseName);
 }

@@ -38,6 +38,11 @@ public class CourseController
         return this.courseService.findAllOwnedBy(discordId);
     }
 
+    @GetMapping("/courses/like")
+    public List<Course> getCoursesWithName(@RequestParam("name") String courseName) {
+        return this.courseService.findAllWithName(courseName);
+    }
+
     @GetMapping("/courses/{courseId}")
     public Course getCourse(@PathVariable String courseId, @RequestParam("discord_id") String discordId) {
         Course course = this.courseService.findById(courseId);

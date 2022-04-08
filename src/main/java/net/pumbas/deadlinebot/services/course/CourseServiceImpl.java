@@ -36,6 +36,11 @@ public class CourseServiceImpl implements CourseService
     }
 
     @Override
+    public List<Course> findAllWithName(String courseName) {
+        return this.courseRepository.findPublicCoursesWithNameLike(courseName);
+    }
+
+    @Override
     public Course findById(String courseId) throws ResourceNotFoundException {
         return this.courseRepository.findById(courseId)
             .orElseThrow(() -> new ResourceNotFoundException("There is no course with the id " + courseId));
