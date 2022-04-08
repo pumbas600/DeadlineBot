@@ -14,6 +14,4 @@ public interface UserService
     }
 
     void deleteById(String userId) throws ResourceNotFoundException;
-
-    void delete(User user);
 }

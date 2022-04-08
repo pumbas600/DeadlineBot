@@ -60,12 +60,6 @@ public class CourseServiceImpl implements CourseService
             throw new ResourceNotFoundException("There is no course owned by you with the id " + courseId);
     }
 
-    @Override
-    public void delete(Course course) {
-        this.courseRepository.delete(course);
-        // TODO: Delete references in User database -
-    }
-
     private void formatCourseName(Course course) throws BadRequestException {
         Matcher matcher = COURSE_NAME_PATTERN.matcher(course.getName());
         if (matcher.matches()) {

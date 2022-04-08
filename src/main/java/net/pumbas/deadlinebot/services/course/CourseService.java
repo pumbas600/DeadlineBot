@@ -19,6 +19,4 @@ public interface CourseService
     Course update(Course course) throws BadRequestException;
 
     void deleteById(String courseId, String discordId) throws ResourceNotFoundException;
-
-    void delete(Course course);
 }
