@@ -38,6 +38,7 @@ public class CourseServiceImpl implements CourseService
 
     @Override
     public Course save(Course course) {
+        // TODO: Verify the courses matches the correct format and is capitalised
         return this.courseRepository.save(course);
     }
 

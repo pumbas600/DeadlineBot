@@ -29,12 +29,12 @@ public class CourseController
     }
 
     @GetMapping("/courses/tracked")
-    public List<Course> getCoursesTrackedBy(@RequestParam("discordId") String discordId) {
+    public List<Course> getCoursesTrackedBy(@RequestParam("discord_id") String discordId) {
         return this.courseService.findAllTrackedBy(discordId);
     }
 
     @GetMapping("/courses/owned")
-    public List<Course> getCoursesOwnedBy(@RequestParam("discordId") String discordId) {
+    public List<Course> getCoursesOwnedBy(@RequestParam("discord_id") String discordId) {
         return this.courseService.findAllOwnedBy(discordId);
     }
 
