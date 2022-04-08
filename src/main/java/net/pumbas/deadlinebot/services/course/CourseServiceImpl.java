@@ -3,13 +3,11 @@ package net.pumbas.deadlinebot.services.course;
 import net.pumbas.deadlinebot.exceptions.BadRequestException;
 import net.pumbas.deadlinebot.exceptions.ResourceNotFoundException;
 import net.pumbas.deadlinebot.models.Course;
-import net.pumbas.deadlinebot.repositories.CourseRepository;
-import net.pumbas.deadlinebot.repositories.CourseTemplateRepository;
+import net.pumbas.deadlinebot.repositories.course.CourseRepository;
+import net.pumbas.deadlinebot.repositories.course.CourseTemplateRepository;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

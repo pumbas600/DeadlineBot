@@ -1,4 +1,4 @@
-package net.pumbas.deadlinebot.repositories;
+package net.pumbas.deadlinebot.repositories.course;
 
 public interface CourseTemplateRepository
 {
