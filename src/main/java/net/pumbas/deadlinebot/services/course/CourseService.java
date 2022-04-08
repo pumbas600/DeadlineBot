@@ -17,7 +17,7 @@ public interface CourseService
 
     List<Course> saveAll(Iterable<Course> courses);
 
-    void deleteById(String courseId);
+    void deleteById(String courseId, String discordId);
 
     void delete(Course course);
 }

@@ -6,6 +6,7 @@ import net.pumbas.deadlinebot.exceptions.UnauthorizedAccessException;
 import net.pumbas.deadlinebot.models.Course;
 import net.pumbas.deadlinebot.services.course.CourseService;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -70,5 +71,10 @@ public class CourseController
             newCourse.setId(courseId);
             return this.courseService.save(newCourse);
         }
+    }
+
+    @DeleteMapping("/courses/{courseId}")
+    public void deleteCourse(@PathVariable String courseId, @RequestParam("discord_id") String discordId) {
+        this.courseService.deleteById(courseId, discordId);
     }
 }

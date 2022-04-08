@@ -11,4 +11,6 @@ public interface CourseRepository extends MongoRepository<Course, String>
 {
     @Query("{owner_id:'?0'}")
     List<Course> findCoursesOwnedBy(String discordId);
+
+
 }

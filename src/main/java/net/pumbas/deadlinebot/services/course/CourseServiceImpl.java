@@ -3,6 +3,7 @@ package net.pumbas.deadlinebot.services.course;
 import net.pumbas.deadlinebot.exceptions.ResourceNotFoundException;
 import net.pumbas.deadlinebot.models.Course;
 import net.pumbas.deadlinebot.repositories.CourseRepository;
+import net.pumbas.deadlinebot.repositories.CourseTemplateRepository;
 
 import org.springframework.stereotype.Service;
 
@@ -12,9 +13,11 @@ import java.util.List;
 public class CourseServiceImpl implements CourseService
 {
     private final CourseRepository courseRepository;
+    private final CourseTemplateRepository courseTemplateRepository;
 
-    public CourseServiceImpl(CourseRepository courseRepository) {
+    public CourseServiceImpl(CourseRepository courseRepository, CourseTemplateRepository courseTemplateRepository) {
         this.courseRepository = courseRepository;
+        this.courseTemplateRepository = courseTemplateRepository;
     }
 
     @Override
@@ -44,13 +47,13 @@ public class CourseServiceImpl implements CourseService
     }
 
     @Override
-    public void deleteById(String courseId) {
-        this.courseRepository.deleteById(courseId);
+    public void deleteById(String courseId, String discordId) {
+        this.courseTemplateRepository.deleteCourseWithIdAndOwnedBy(courseId, discordId);
     }
 
     @Override
     public void delete(Course course) {
         this.courseRepository.delete(course);
-        // TODO: Delete references in User database
+        // TODO: Delete references in User database -
     }
 }
