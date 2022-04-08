@@ -1,5 +1,7 @@
 package net.pumbas.deadlinebot.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -20,9 +22,10 @@ public class Course
     private String name;
 
     @Field("owner_id")
+    @JsonProperty("owner_id")
     private String ownerId;
 
     @Field("is_public")
+    @JsonProperty("is_public")
     private boolean isPublic;
-
 }
