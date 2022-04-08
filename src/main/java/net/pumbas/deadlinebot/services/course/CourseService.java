@@ -8,8 +8,6 @@ import java.util.List;
 
 public interface CourseService
 {
-    List<Course> findAllTrackedBy(String discordId);
-
     List<Course> findAllOwnedBy(String discordId);
 
     List<Course> findAllWithName(String courseName);

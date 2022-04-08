@@ -26,11 +26,6 @@ public class CourseServiceImpl implements CourseService
     }
 
     @Override
-    public List<Course> findAllTrackedBy(String discordId) {
-        return null;
-    }
-
-    @Override
     public List<Course> findAllOwnedBy(String discordId) {
         return this.courseRepository.findCoursesOwnedBy(discordId);
     }

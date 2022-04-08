@@ -28,11 +28,6 @@ public class CourseController
         this.courseService = courseService;
     }
 
-    @GetMapping("/courses/tracked")
-    public List<Course> getCoursesTrackedBy(@RequestParam("discord_id") String discordId) {
-        return this.courseService.findAllTrackedBy(discordId);
-    }
-
     @GetMapping("/courses/owned")
     public List<Course> getCoursesOwnedBy(@RequestParam("discord_id") String discordId) {
         return this.courseService.findAllOwnedBy(discordId);
