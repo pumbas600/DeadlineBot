@@ -6,6 +6,7 @@ import net.pumbas.deadlinebot.exceptions.ResourceNotFoundException;
 import net.pumbas.deadlinebot.models.Course;
 import net.pumbas.deadlinebot.repositories.course.CourseRepository;
 import net.pumbas.deadlinebot.repositories.course.CourseTemplateRepository;
+import net.pumbas.deadlinebot.repositories.user.UserTemplateRepository;
 
 import org.springframework.stereotype.Service;
 
@@ -20,10 +21,15 @@ public class CourseServiceImpl implements CourseService
 
     private final CourseRepository courseRepository;
     private final CourseTemplateRepository courseTemplateRepository;
+    private final UserTemplateRepository userTemplateRepository;
 
-    public CourseServiceImpl(CourseRepository courseRepository, CourseTemplateRepository courseTemplateRepository) {
+    public CourseServiceImpl(CourseRepository courseRepository,
+                             CourseTemplateRepository courseTemplateRepository,
+                             UserTemplateRepository userTemplateRepository
+    ) {
         this.courseRepository = courseRepository;
         this.courseTemplateRepository = courseTemplateRepository;
+        this.userTemplateRepository = userTemplateRepository;
     }
 
     @Override
@@ -56,14 +62,19 @@ public class CourseServiceImpl implements CourseService
     @Override
     public Course update(Course course) throws BadRequestException {
         this.formatCourseName(course);
-        // TODO: If the course is being made private, delete any references to it
-        return this.courseRepository.save(course);
+
+        Course updatedCourse = this.courseRepository.save(course);
+        if (!course.isPublic())
+            this.userTemplateRepository.deletePublicCourseReferences(course.getOwnerId(), course.getId());
+
+        return updatedCourse;
     }
 
     @Override
     public void deleteById(String courseId, String discordId) throws ResourceNotFoundException {
         if (!this.courseTemplateRepository.deleteCourseWithIdAndOwnedBy(courseId, discordId))
             throw new ResourceNotFoundException("There is no course owned by you with the id " + courseId);
+        this.userTemplateRepository.deleteAllCourseReferences(courseId);
     }
 
     private void formatCourseName(Course course) throws BadRequestException {
