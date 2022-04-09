@@ -55,7 +55,10 @@ public class UserController
         User user = this.userService.findById(discordId);
 
         List<Course> courses = this.courseService.findAllById(courseIds);
-        if (courses.stream().allMatch(course -> course.trackableBy(discordId)))
+        boolean notAllTrackable = courses.size() != courseIds.size() ||
+            courses.stream().noneMatch(course -> course.trackableBy(discordId));
+        
+        if (notAllTrackable)
             throw new BadRequestException("Not all the courses are trackable");
 
         user.setCourses(courses);
