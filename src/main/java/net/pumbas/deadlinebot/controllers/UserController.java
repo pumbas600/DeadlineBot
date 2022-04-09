@@ -1,7 +1,9 @@
 package net.pumbas.deadlinebot.controllers;
 
 import net.pumbas.deadlinebot.App;
+import net.pumbas.deadlinebot.exceptions.BadRequestException;
 import net.pumbas.deadlinebot.exceptions.ResourceNotFoundException;
+import net.pumbas.deadlinebot.models.Course;
 import net.pumbas.deadlinebot.models.User;
 import net.pumbas.deadlinebot.services.course.CourseService;
 import net.pumbas.deadlinebot.services.user.UserService;
@@ -44,13 +46,20 @@ public class UserController
     @PutMapping("/users/{discordId}")
     public User updateUser(@PathVariable String discordId, @RequestBody User newUser) {
         newUser.setDiscordId(discordId);
+        // TODO: Validate courses
         return this.userService.save(newUser);
     }
 
     @PutMapping("/users/{discordId}/courses")
     public User updateUserCourses(@PathVariable String discordId, @RequestBody List<String> courseIds) {
-        return null;
-        // TODO: Validate the courses
+        User user = this.userService.findById(discordId);
+
+        List<Course> courses = this.courseService.findAllById(courseIds);
+        if (courses.stream().allMatch(course -> course.trackableBy(discordId)))
+            throw new BadRequestException("Not all the courses are trackable");
+
+        user.setCourses(courses);
+        return this.userService.update(user);
     }
 
     @DeleteMapping("/users/{discordId}")
