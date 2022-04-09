@@ -4,6 +4,9 @@ import net.pumbas.deadlinebot.exceptions.ResourceNotFoundException;
 import net.pumbas.deadlinebot.models.User;
 import net.pumbas.deadlinebot.repositories.user.UserRepository;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class UserServiceImpl implements UserService
 {
     private final UserRepository userRepository;

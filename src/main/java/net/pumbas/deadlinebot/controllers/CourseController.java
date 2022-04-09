@@ -54,9 +54,9 @@ public class CourseController
     }
 
     @PutMapping("/courses/{courseId}")
-    public Course replaceCourse(@PathVariable String courseId,
-                                @RequestBody Course newCourse,
-                                @RequestParam("discord_id") String discordId
+    public Course updateCourse(@PathVariable String courseId,
+                               @RequestBody Course newCourse,
+                               @RequestParam("discord_id") String discordId
     ) {
         newCourse.setOwnerId(discordId);
         try {

@@ -20,6 +20,7 @@ import lombok.Setter;
 public class User
 {
     @Id
+    @JsonProperty("discord_id")
     private String discordId;
 
     @Field("calendar_id")
