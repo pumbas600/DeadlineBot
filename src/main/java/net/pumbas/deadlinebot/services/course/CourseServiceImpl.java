@@ -1,5 +1,6 @@
 package net.pumbas.deadlinebot.services.course;
 
+import net.pumbas.deadlinebot.Utils;
 import net.pumbas.deadlinebot.exceptions.BadRequestException;
 import net.pumbas.deadlinebot.exceptions.ResourceNotFoundException;
 import net.pumbas.deadlinebot.models.Course;
@@ -39,6 +40,11 @@ public class CourseServiceImpl implements CourseService
     public Course findById(String courseId) throws ResourceNotFoundException {
         return this.courseRepository.findById(courseId)
             .orElseThrow(() -> new ResourceNotFoundException("There is no course with the id " + courseId));
+    }
+
+    @Override
+    public List<Course> findAllById(Iterable<String> courseIds) {
+        return Utils.listOf(this.courseRepository.findAllById(courseIds));
     }
 
     @Override

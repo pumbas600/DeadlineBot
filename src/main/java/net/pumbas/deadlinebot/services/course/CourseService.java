@@ -14,6 +14,8 @@ public interface CourseService
 
     Course findById(String courseId) throws ResourceNotFoundException;
 
+    List<Course> findAllById(Iterable<String> courseIds);
+
     Course save(Course course) throws BadRequestException;
 
     Course update(Course course) throws BadRequestException;

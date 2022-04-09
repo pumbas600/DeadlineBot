@@ -50,7 +50,7 @@ public class UserController
     @PutMapping("/users/{discordId}/courses")
     public User updateUserCourses(@PathVariable String discordId, @RequestBody List<String> courseIds) {
         return null;
-        // TODO: Validate the courseIds
+        // TODO: Validate the courses
     }
 
     @DeleteMapping("/users/{discordId}")
