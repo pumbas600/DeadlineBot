@@ -4,6 +4,7 @@ import net.pumbas.deadlinebot.App;
 import net.pumbas.deadlinebot.exceptions.BadRequestException;
 import net.pumbas.deadlinebot.exceptions.ResourceNotFoundException;
 import net.pumbas.deadlinebot.models.Course;
+import net.pumbas.deadlinebot.models.PostUser;
 import net.pumbas.deadlinebot.models.User;
 import net.pumbas.deadlinebot.services.course.CourseService;
 import net.pumbas.deadlinebot.services.user.UserService;
@@ -25,11 +26,9 @@ import java.util.List;
 public class UserController
 {
     private final UserService userService;
-    private final CourseService courseService;
 
-    public UserController(UserService userService, CourseService courseService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.courseService = courseService;
     }
 
     @GetMapping("/users/{discordId}")
@@ -38,31 +37,20 @@ public class UserController
     }
 
     @PostMapping("/users")
-    public User newUser(@RequestBody User user, @RequestParam("discord_id") String discordId) {
-        user.setDiscordId(discordId);
-        return this.userService.save(user);
+    public User newUser(@RequestBody PostUser newUser, @RequestParam("discord_id") String discordId) {
+        newUser.setDiscordId(discordId);
+        return this.userService.save(newUser);
     }
 
     @PutMapping("/users/{discordId}")
-    public User updateUser(@PathVariable String discordId, @RequestBody User newUser) {
+    public User updateUser(@PathVariable String discordId, @RequestBody PostUser newUser) {
         newUser.setDiscordId(discordId);
-        // TODO: Validate courses
         return this.userService.save(newUser);
     }
 
     @PutMapping("/users/{discordId}/courses")
     public User updateUserCourses(@PathVariable String discordId, @RequestBody List<String> courseIds) {
-        User user = this.userService.findById(discordId);
-
-        List<Course> courses = this.courseService.findAllById(courseIds);
-        boolean notAllTrackable = courses.size() != courseIds.size() ||
-            courses.stream().noneMatch(course -> course.trackableBy(discordId));
-        
-        if (notAllTrackable)
-            throw new BadRequestException("Not all the courses are trackable");
-
-        user.setCourses(courses);
-        return this.userService.update(user);
+        return this.userService.updateCourses(discordId, courseIds);
     }
 
     @DeleteMapping("/users/{discordId}")
