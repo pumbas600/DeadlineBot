@@ -1,5 +1,7 @@
 package net.pumbas.deadlinebot.repositories.course;
 
+import com.mongodb.client.result.DeleteResult;
+
 import net.pumbas.deadlinebot.models.Course;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -19,11 +21,7 @@ public class CourseTemplateRepositoryImpl implements CourseTemplateRepository
     @Override
     public boolean deleteCourseWithIdAndOwnedBy(String courseId, String discordId) {
         Query query = Query.query(Criteria.where("id").is(courseId).and("owner_id").is(discordId));
-        Course course = this.template.findAndRemove(query, Course.class);
-        if (course != null) {
-            // Delete references in user collection
-        }
-
-        return course != null;
+        DeleteResult result = this.template.remove(query, Course.class);
+        return result.getDeletedCount() != 0;
     }
 }

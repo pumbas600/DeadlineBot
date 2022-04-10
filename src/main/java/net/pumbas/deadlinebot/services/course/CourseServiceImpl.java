@@ -82,6 +82,7 @@ public class CourseServiceImpl implements CourseService
         if (matcher.matches()) {
             course.setName("%s %s".formatted(matcher.group(1), matcher.group(2)).toUpperCase());
         }
-        else throw new BadRequestException("The course name %s doesn't match the correct format: SOFTENG 281");
+        else throw new BadRequestException(
+            "The course name %s doesn't match the correct format: SOFTENG 281".formatted(course.getName()));
     }
 }
