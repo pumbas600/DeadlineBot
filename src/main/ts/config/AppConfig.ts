@@ -1,3 +1,9 @@
+import axios from "axios";
+
 const API_PREFIX = '/api/v1';
 
-export { API_PREFIX };
+function configureAxios() {
+    axios.defaults.baseURL = API_PREFIX;
+}
+
+export { configureAxios, API_PREFIX };

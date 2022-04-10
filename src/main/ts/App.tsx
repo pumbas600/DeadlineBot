@@ -2,18 +2,21 @@ import React, {useEffect, useState} from 'react';
 import './App.css';
 import TrackedCalendar from "./components/TrackedCalendar";
 import {Box, Fab, List, ListItem, Tooltip} from "@mui/material";
-import UserData from "./data/UserData";
+import UserData from "./models/UserData";
 import axios from "axios";
-import {API_PREFIX} from "./config/AppConfig";
+import { configureAxios } from "./config/AppConfig";
+
+configureAxios();
 
 function App() {
 
+    const discordId = '260930648330469387';
     const [userData, setUserData] = useState<UserData>({ linkedDiscordId: '-1', trackedCalendars: [] });
 
     useEffect(() => {
         async function fetchUserData() {
             try {
-                const response = await axios.get<UserData>(API_PREFIX + '/deadlines/data');
+                const response = await axios.get<UserData>('/deadlines/data');
                 setUserData(response.data);
             } catch (error) {
                 console.error(error);

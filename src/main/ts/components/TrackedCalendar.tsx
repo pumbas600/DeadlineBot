@@ -8,7 +8,7 @@ import {
     ListItem,
     Typography
 } from "@mui/material";
-import TrackedCalendarData from "../data/TrackedCalendarData";
+import TrackedCalendarData from "../models/TrackedCalendarData";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import TrackedCourse from "./TrackedCourse";
 import {blue} from "@mui/material/colors";
