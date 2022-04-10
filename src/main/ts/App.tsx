@@ -5,6 +5,7 @@ import {Box, Fab, List, ListItem, Tooltip} from "@mui/material";
 import UserData from "./models/UserData";
 import axios from "axios";
 import { configureAxios } from "./config/AppConfig";
+import User from "./models/User";
 
 configureAxios();
 
@@ -12,6 +13,7 @@ function App() {
 
     const discordId = '260930648330469387';
     const [userData, setUserData] = useState<UserData>({ linkedDiscordId: '-1', trackedCalendars: [] });
+    const [user, setUser] = useState<User>({ courses: [] });
 
     useEffect(() => {
         async function fetchUserData() {

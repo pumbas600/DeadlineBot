@@ -2,9 +2,6 @@ package net.pumbas.deadlinebot.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
-import org.springframework.data.mongodb.core.mapping.Field;
-
 import java.util.List;
 
 import lombok.AllArgsConstructor;
