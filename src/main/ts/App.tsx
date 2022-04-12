@@ -9,6 +9,8 @@ import User from "./models/User";
 
 configureAxios();
 
+//TODO: Basic state
+
 function App() {
 
     const discordId = '260930648330469387';
@@ -18,8 +20,8 @@ function App() {
     useEffect(() => {
         async function fetchUserData() {
             try {
-                const response = await axios.get<UserData>('/deadlines/data');
-                setUserData(response.data);
+                const { data: user } = await axios.get<User>(`/users/${discordId}`);
+                setUser(user);
             } catch (error) {
                 console.error(error);
             }
