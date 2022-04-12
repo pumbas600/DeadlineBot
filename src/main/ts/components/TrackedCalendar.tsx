@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import TrackedCalendarData from "../models/TrackedCalendarData";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import TrackedCourse from "./TrackedCourse";
+import Course from "./Course";
 import {blue} from "@mui/material/colors";
 import LabelledControl from "./LabelledControl";
 import AddPersonalCourse from "./AddPersonalCourse";
@@ -79,7 +79,7 @@ const TrackedCalendar: React.FC<Props> = (props) => {
                 <List>
                     {courses.map((course: string) => {
                         return (
-                            <TrackedCourse key={course} course={course} removeCourse={removeCourse}/>
+                            <Course key={course} course={course} removeCourse={removeCourse}/>
                         );
                     })}
                     <ListItem disablePadding>
