@@ -13,7 +13,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import TrackedCourse from "./TrackedCourse";
 import {blue} from "@mui/material/colors";
 import LabelledControl from "./LabelledControl";
-import AddTrackedCourse from "./AddTrackedCourse";
+import AddPersonalCourse from "./AddPersonalCourse";
 import CloseIcon from '@mui/icons-material/Close';
 import {SpacedRow} from "./StyledComponents";
 
@@ -83,7 +83,7 @@ const TrackedCalendar: React.FC<Props> = (props) => {
                         );
                     })}
                     <ListItem disablePadding>
-                        <AddTrackedCourse addCourse={addCourse} />
+                        <AddPersonalCourse addCourse={addCourse} />
                     </ListItem>
                 </List>
             </Box>

@@ -2,9 +2,10 @@ import React, {useState} from "react";
 import {SpacedRow} from "./StyledComponents";
 import {IconButton, TextField} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
+import Course from "../models/Course";
 
 interface Props {
-    addCourse: (course: string) => boolean;
+    addCourse: (course: Course) => boolean;
 }
 
 interface State {
@@ -12,7 +13,7 @@ interface State {
     error: string;
 }
 
-const AddTrackedCourse: React.FC<Props> = (props) => {
+const AddPersonalCourse: React.FC<Props> = (props) => {
 
     const coursePattern = /([a-zA-Z]+) ?(\w*[\d]+\w*)/g
     const [state, setState] = useState<State>({ course: '', error: '' });
@@ -26,7 +27,8 @@ const AddTrackedCourse: React.FC<Props> = (props) => {
             const match = coursePattern.exec(state.course);
             if (match) {
                 const formattedCourseName = `${match[1].toUpperCase()} ${match[2]}`;
-                if (!props.addCourse(formattedCourseName)) {
+                const newCourse: Course = { name: formattedCourseName, is_public: false };
+                if (!props.addCourse(newCourse)) {
                     setState({ ...state, error: 'That course is already tracked' });
                 }
                 else setState({ course: '', error: '' });
@@ -59,4 +61,4 @@ const AddTrackedCourse: React.FC<Props> = (props) => {
     );
 }
 
-export default AddTrackedCourse;
+export default AddPersonalCourse;

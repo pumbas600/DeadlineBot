@@ -7,7 +7,7 @@ import {SpacedRow} from "./StyledComponents";
 import CloseIcon from "@mui/icons-material/Close";
 import LabelledControl from "./LabelledControl";
 import TrackedCourse from "./TrackedCourse";
-import AddTrackedCourse from "./AddTrackedCourse";
+import AddPersonalCourse from "./AddPersonalCourse";
 
 interface Props {
     calendarId: string;
@@ -75,7 +75,7 @@ const Calendar: React.FC<Props> = (props) => {
                         );
                     })}
                     <ListItem disablePadding>
-                        <AddTrackedCourse addCourse={addCourse} />
+                        <AddPersonalCourse addCourse={addCourse} />
                     </ListItem>
                 </List>
             </Box>
