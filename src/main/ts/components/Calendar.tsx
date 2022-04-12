@@ -6,7 +6,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import {SpacedRow} from "./StyledComponents";
 import CloseIcon from "@mui/icons-material/Close";
 import LabelledControl from "./LabelledControl";
-import Course from "./Course";
+import TrackedCourse from "./TrackedCourse";
 import AddPersonalCourse from "./AddPersonalCourse";
 
 interface Props {
@@ -85,7 +85,7 @@ const Calendar: React.FC<Props> = (props) => {
                 <List>
                     {courses.map((course: Course) => {
                         return (
-                            <Course key={course.name} course={course} removeCourse={removeCourse}/>
+                            <TrackedCourse key={course.name} course={course} removeCourse={removeCourse}/>
                         );
                     })}
                     <ListItem disablePadding>
