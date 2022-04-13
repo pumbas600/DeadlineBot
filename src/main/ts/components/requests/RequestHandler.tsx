@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import axios from "axios";
+import axios, {Method} from "axios";
 
 enum RequestState {
     Loading,
@@ -8,6 +8,7 @@ enum RequestState {
 }
 
 interface Props<T> {
+    method: Method;
     url: string;
     loading?: JSX.Element;
     success: (data: T) => JSX.Element;
@@ -28,7 +29,7 @@ const RequestHandler = <T extends object>(props: Props<T>): JSX.Element => {
     useEffect(() => {
         async function doRequest() {
             try {
-                const { data } = await axios.get<T>(props.url);
+                const { data } = await axios.request<T>({ url: props.url, method: props.method });
                 setState({ requestState: RequestState.Success, data: data });
             } catch (error) {
                 setState({ requestState: RequestState.Error, data: null, error: (error as Error).message});
@@ -57,6 +58,10 @@ const RequestHandler = <T extends object>(props: Props<T>): JSX.Element => {
 
     return <p/>; // Just because typescript can't infer that there is no path to this...
 }
+
+RequestHandler.defaultProps = {
+    method: 'GET'
+};
 
 export default RequestHandler;
 export { RequestState }
