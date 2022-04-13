@@ -9,9 +9,9 @@ enum RequestState {
 
 interface Props<T> {
     url: string;
-    loading?: JSX.Element[];
-    success: (data: T) => JSX.Element[];
-    error?: JSX.Element[];
+    loading?: JSX.Element;
+    success: (data: T) => JSX.Element;
+    error?: JSX.Element;
     callback?: (data: T) => void;
 }
 
@@ -21,7 +21,7 @@ interface State<T> {
     error?: string;
 }
 
-const RequestHandler = <T extends object>(props: Props<T>) => {
+const RequestHandler = <T extends object>(props: Props<T>): JSX.Element => {
 
     const [state, setState] = useState<State<T>>({ requestState: RequestState.Loading, data: null });
 
@@ -52,8 +52,10 @@ const RequestHandler = <T extends object>(props: Props<T>) => {
             break;
         case RequestState.Error:
             console.error(state.error ?? 'There was no error message')
-            return props.error ?? <p>Something went wrong...</p>
+            return props.error ?? <p>Something went wrong...</p>;
     }
+
+    return <p/>; // Just because typescript can't infer that there is no path to this...
 }
 
 export default RequestHandler;
