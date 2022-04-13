@@ -16,7 +16,6 @@ interface Props {
 }
 
 const Calendar: React.FC<Props> = (props) => {
-    var childrenHaveBeenUpdated = false;
     const [courses, setCourses] = React.useState<Course[]>(sortCourses(props.courses));
 
     function sortCourses(courses: Course[]): Course[] {
@@ -24,27 +23,14 @@ const Calendar: React.FC<Props> = (props) => {
     }
 
     function removeCourse(courseName: string) {
-        updateCourses((courses) => courses.filter((c) => c.name !== courseName));
-    }
-
-    function setChildrenHaveBeenUpdated() {
-        childrenHaveBeenUpdated = true;
-    }
-
-    function updateCourses(updateCourses: (current: Course[]) => Course[]) {
-        var currentCourses = courses;
-        if (childrenHaveBeenUpdated) {
-            // Fetch courses from children
-        }
-        setCourses(updateCourses(currentCourses));
-        childrenHaveBeenUpdated = false; // TODO: Check if this automatically occurs during re-rendering of component
+        setCourses((courses) => courses.filter((c) => c.name !== courseName));
     }
 
     function addCourse(course: Course): boolean {
         if (courses.filter((c) => c.name === course.name).length !== 0)
             return false;
 
-        updateCourses(courses => sortCourses([ ...courses, course ]));
+        setCourses(courses => sortCourses([ ...courses, course ]));
         return true;
     }
 

@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import TrackedCalendar from "./components/TrackedCalendar";
 import {Box, Fab, List, ListItem, Tooltip} from "@mui/material";
 import UserData from "./models/UserData";
 import axios from "axios";
 import { configureAxios } from "./config/AppConfig";
 import User from "./models/User";
+import Calendar from "./components/Calendar";
 
 configureAxios();
 
@@ -47,15 +47,7 @@ function App() {
                         padding: 1
                     }}
                 >
-                    <List sx={{ width: '100%' }}>
-                        {userData.trackedCalendars.map((trackedCalendar) => {
-                            return (
-                                <ListItem key={trackedCalendar.id}>
-                                    <TrackedCalendar trackedCalendar={trackedCalendar}/>
-                                </ListItem>
-                            );
-                        })}
-                    </List>
+                    <Calendar calendarId={user.calendar_id ?? ''} courses={user.courses}/>
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end'}}>
                         <Tooltip title="Track another calendar" placement="left" arrow>
                             <Fab color="primary">
