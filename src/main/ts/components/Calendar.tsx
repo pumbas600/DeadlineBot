@@ -65,7 +65,7 @@ const Calendar: React.FC<Props> = (props) => {
                         {props.calendarId}
                     </Typography>
                 </LabelledControl>
-                <Typography variant="h6">
+                <Typography variant="h5" sx={{ textAlign: 'left' }}>
                     Courses
                 </Typography>
                 <List>

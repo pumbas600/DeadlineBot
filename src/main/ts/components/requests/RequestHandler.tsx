@@ -64,4 +64,3 @@ RequestHandler.defaultProps = {
 };
 
 export default RequestHandler;
-export { RequestState }
