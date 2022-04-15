@@ -3,7 +3,11 @@ const path = require('path');
 module.exports = {
     devtool: 'source-map',
     output: {
+        path: path.resolve(process.cwd(), 'src/main/resources/static/dist'),
         filename: 'react-app.js'
+    },
+    entry: {
+        app: path.resolve(process.cwd(), 'src/main/ts/index.tsx')
     },
     module: {
         rules: [

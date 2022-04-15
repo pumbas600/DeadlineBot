@@ -10,7 +10,7 @@ import TrackedCourse from "./TrackedCourse";
 import AddPersonalCourse from "./AddPersonalCourse";
 
 interface Props {
-    calendarId: string;
+    calendarId?: string;
     calendarName?: string;
     courses: Course[]
 }
@@ -62,7 +62,7 @@ const Calendar: React.FC<Props> = (props) => {
             <Box sx={{ paddingY: 1, paddingX: 2 }}>
                 <LabelledControl label="ID">
                     <Typography variant="subtitle1" sx={{ marginRight: '9px' }}>
-                        {props.calendarId}
+                        {props.calendarId ?? 'No id found'}
                     </Typography>
                 </LabelledControl>
                 <Typography variant="h5" sx={{ textAlign: 'left' }}>
