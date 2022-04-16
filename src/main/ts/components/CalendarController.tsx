@@ -24,6 +24,7 @@ const CalendarController: React.FC<Props> = ({user}) => {
                     padding: 1
                 }}
             >
+                <div>Hi 4</div>
                 <Calendar calendarId={user.calendar_id ?? ''} courses={user.courses}/>
                 <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
                     <Tooltip title="Track another calendar" placement="left" arrow>

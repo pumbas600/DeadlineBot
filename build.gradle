@@ -3,7 +3,6 @@ plugins {
     id 'io.freefair.lombok' version '6.2.0'
     id 'org.springframework.boot' version '2.6.5'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id "com.github.node-gradle.node" version "3.0.1"
 }
 
 group = 'net.pumbas'
@@ -44,11 +43,22 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-task buildReactApp(type: NodeTask, dependsOn: 'npmInstall') {
-    script = project.file('node_modules/webpack/bin/webpack.js')
-    args = [
-            '--mode', 'development',
-    ]
+task stopWatching {
+    doFirst {
+        println("Stopping node building")
+        if (tasks.buildReactApp.process != null) {
+            tasks.buildReactApp.process.destroy()
+        }
+    }
+}
+
+task buildReactApp() {
+    doFirst {
+        println("Starting node building")
+        ext.process = new ProcessBuilder()
+            .command("node", "run", "build")
+            .start()
+    }
 }
 
 processResources.dependsOn 'buildReactApp'

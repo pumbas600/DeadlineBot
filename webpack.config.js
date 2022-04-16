@@ -2,6 +2,8 @@ const path = require('path');
 
 module.exports = {
     devtool: 'source-map',
+    mode: "development",
+    watch: true,
     output: {
         path: path.resolve(process.cwd(), 'src/main/resources/static/dist'),
         filename: 'react-app.js'
