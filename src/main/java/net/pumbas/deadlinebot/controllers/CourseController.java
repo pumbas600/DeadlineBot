@@ -28,8 +28,8 @@ public class CourseController
         this.courseService = courseService;
     }
 
-    @GetMapping("/courses/owned")
-    public List<Course> getCoursesOwnedBy(@RequestParam("discord_id") String discordId) {
+    @GetMapping("/courses")
+    public List<Course> getAllCourses(@RequestParam("discord_id") String discordId) {
         return this.courseService.findAllOwnedBy(discordId);
     }
 
@@ -38,19 +38,19 @@ public class CourseController
         return this.courseService.findAllWithName(courseName);
     }
 
+    @PostMapping("/courses")
+    public Course createCourse(@RequestBody Course course, @RequestParam("discord_id") String discordId) {
+        course.setOwnerId(discordId);
+        course.setId(null); // Automatically generate the course id
+        return this.courseService.save(course);
+    }
+
     @GetMapping("/courses/{courseId}")
     public Course getCourse(@PathVariable String courseId, @RequestParam("discord_id") String discordId) {
         Course course = this.courseService.findById(courseId);
         if (course.trackableBy(discordId))
             return course;
         throw new UnauthorizedAccessException("The course with the id %s is not public".formatted(courseId));
-    }
-
-    @PostMapping("/courses")
-    public Course newCourse(@RequestBody Course course, @RequestParam("discord_id") String discordId) {
-        course.setOwnerId(discordId);
-        course.setId(null); // Automatically generate the course id
-        return this.courseService.save(course);
     }
 
     @PutMapping("/courses/{courseId}")
