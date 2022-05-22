@@ -7,8 +7,6 @@ import RequestHandler from "./components/requests/RequestHandler";
 
 configureAxios();
 
-//TODO: Basic state
-
 function App() {
 
     const discordId = '260930648330469387';
